@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BitMatrixProject
+{
+    class Program
+    {
+        static void Main()
+        {
+            BitMatrix toStringTest = new BitMatrix(3, 4);
+            Console.WriteLine(toStringTest.ToString());
+        }
+    }
+}
