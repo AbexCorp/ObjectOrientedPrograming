@@ -10,8 +10,7 @@ namespace BitMatrixProject
     {
         static void Main()
         {
-            BitMatrix toStringTest = new BitMatrix(3, 4);
-            Console.WriteLine(toStringTest.ToString());
+            
         }
     }
 }
