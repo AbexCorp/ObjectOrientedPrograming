@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TimeTimePeriod.Structures
 {
-    public struct TimePeriod
+    public struct TimePeriod : IEquatable<TimePeriod>, IComparable<TimePeriod>
     {
         // <<< Variables >>>
         private readonly long _seconds;
@@ -59,13 +60,78 @@ namespace TimeTimePeriod.Structures
         }
         public TimePeriod(string text)
         {
+            if(text is null || text == "")
+                throw new ArgumentNullException();
+
             byte[] parsedNumbers = Array.ConvertAll(text.Split(':', StringSplitOptions.RemoveEmptyEntries), byte.Parse);
             if (parsedNumbers.Length < 2 || parsedNumbers.Length > 3)
                 throw new FormatException();
             
             TimePeriod temp = new TimePeriod();
-            temp = parsedNumbers.Length == 3 ? new TimePeriod(parsedNumbers[0], parsedNumbers[1]) : new TimePeriod(parsedNumbers[0], parsedNumbers[1], parsedNumbers[2]);
+            temp = parsedNumbers.Length == 3 ? new TimePeriod(parsedNumbers[0], parsedNumbers[1], parsedNumbers[2]) : new TimePeriod(parsedNumbers[0], parsedNumbers[1]);
             _seconds = temp.DurationInSeconds;
+        }
+
+
+
+        // <<< ToString >>>
+        public override string ToString()
+        {
+            return Duration;
+        }
+
+
+
+        // <<< Equatable >>>
+        public override bool Equals(object? obj)
+        {
+            return base.Equals(obj);
+        }
+        public bool Equals(TimePeriod tp)
+        {
+            if(DurationInSeconds == tp.DurationInSeconds) 
+                return true;
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return _seconds.GetHashCode();
+        }
+
+
+
+        // <<< Comparable >>>
+        public int CompareTo(TimePeriod tp)
+        {
+            return DurationInSeconds.CompareTo(tp.DurationInSeconds);
+        }
+
+
+
+        // <<< Operators >>>
+        public static bool operator ==(TimePeriod t1, TimePeriod t2)
+        {
+            return t1.Equals(t2);
+        }
+        public static bool operator !=(TimePeriod t1, TimePeriod t2)
+        {
+            return !t1.Equals(t2);
+        }
+        public static bool operator >(TimePeriod t1, TimePeriod t2)
+        {
+            return t1.CompareTo(t2) > 0 ? true : false;
+        }
+        public static bool operator <(TimePeriod t1, TimePeriod t2)
+        {
+            return t1.CompareTo(t2) < 0 ? true : false;
+        }
+        public static bool operator >=(TimePeriod t1, TimePeriod t2)
+        {
+            return t1.CompareTo(t2) >= 0 ? true : false;
+        }
+        public static bool operator <=(TimePeriod t1, TimePeriod t2)
+        {
+            return t1.CompareTo(t2) <= 0 ? true : false;
         }
     }
 }
