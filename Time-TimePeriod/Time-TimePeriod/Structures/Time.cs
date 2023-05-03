@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TimeTimePeriod.Structures
 {
-    struct Time : IEquatable<Time>, IComparable<Time>
+    public struct Time : IEquatable<Time>, IComparable<Time>
     {
         // <<< Variables >>>
         private readonly byte _hours;
@@ -164,5 +164,8 @@ namespace TimeTimePeriod.Structures
             return t1.CompareTo(t2) <= 0 ? true : false;
         }
 
+        //Plus
+        //Minus
+        //Rest?
     }
 }

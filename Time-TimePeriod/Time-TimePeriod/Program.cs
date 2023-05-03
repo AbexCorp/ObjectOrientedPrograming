@@ -12,7 +12,8 @@ namespace TimeTimePeriod
     {
         static void Main(string[] args)
         {
-            Console.WriteLine();
+            /*
+            Console.WriteLine("< < <<< Time >>> > >");
             Console.WriteLine("Constructors");
             Console.WriteLine("--------------------------");
 
@@ -107,6 +108,9 @@ namespace TimeTimePeriod
             Console.WriteLine(!(t2 >= t1));
             Console.WriteLine(!(t1 <= t2));
             Console.WriteLine(t2 <= t1);
+            */
+            
+            
         }
     }
 }
