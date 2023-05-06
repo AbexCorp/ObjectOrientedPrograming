@@ -109,8 +109,6 @@ namespace TimeTimePeriod
             Console.WriteLine(!(t1 <= t2));
             Console.WriteLine(t2 <= t1);
             */
-            
-            
         }
     }
 }

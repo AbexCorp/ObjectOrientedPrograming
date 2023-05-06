@@ -51,6 +51,9 @@ namespace TimeTimePeriod.Structures
         {
             if(text is null || text == "")
                 throw new ArgumentNullException();
+            text = text.Trim();
+            if (text == "")
+                throw new ArgumentNullException();
 
             string[] splitText = text.Split(':', StringSplitOptions.RemoveEmptyEntries);
             if (splitText.Length > 3 || splitText.Length < 2)
