@@ -41,7 +41,7 @@ namespace TimeTimePeriod.Structures
         }
         public TimePeriod( byte hours, byte minutes, byte seconds)
         {
-            if (hours < 0 || minutes < 0 || seconds < 0 || minutes > 59 || seconds > 59)
+            if (minutes > 59 || seconds > 59)
                 throw new ArgumentOutOfRangeException();
             _seconds = 3600 * hours + 60 * minutes + seconds;
         }
@@ -56,11 +56,17 @@ namespace TimeTimePeriod.Structures
         {
             long seconds1 = new TimePeriod(t1.Hours, t1.Minutes, t1.Seconds).DurationInSeconds;
             long seconds2 = new TimePeriod(t2.Hours, t2.Minutes, t2.Seconds).DurationInSeconds;
-            _seconds = Math.Abs(seconds2 - seconds1);
+            if(seconds1 <= seconds2)
+                _seconds = Math.Abs(seconds2 - seconds1);
+            else
+                _seconds = (60*60*24)-seconds1 + seconds2;
         }
         public TimePeriod(string text)
         {
             if(text is null || text == "")
+                throw new ArgumentNullException();
+            text = text.Trim();
+            if(text == "")
                 throw new ArgumentNullException();
 
             byte[] parsedNumbers = Array.ConvertAll(text.Split(':', StringSplitOptions.RemoveEmptyEntries), byte.Parse);
