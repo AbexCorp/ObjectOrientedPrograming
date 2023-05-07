@@ -210,32 +210,32 @@ namespace UnitTests
         #region ToString ====================================================
 
         [DataTestMethod, TestCategory("ToString")]
-        [DataRow("00:00:00",    (byte)0,  (byte)0,  (byte)0)]
-        [DataRow("23:59:59",    (byte)23, (byte)59, (byte)59)]
-        [DataRow("23:59:00",    (byte)23, (byte)59, (byte)0)]
-        [DataRow("07:23:05",    (byte)7,  (byte)23, (byte)5)]
-        [DataRow("14:03:34",    (byte)14, (byte)3,  (byte)34)]
-        [DataRow("03:23:00",    (byte)3,  (byte)23, (byte)0)]
-        [DataRow("15:09:41",    (byte)15, (byte)9,  (byte)41)]
-        public void ToString(string text, byte Hours, byte Minutes, byte Seconds)
+        [DataRow("00:00:00", 0, 0, 0)]
+        [DataRow("23:59:59", 23, 59, 59)]
+        [DataRow("23:59:00", 23, 59, 0)]
+        [DataRow("07:23:05", 7, 23, 5)]
+        [DataRow("14:03:34", 14, 3, 34)]
+        [DataRow("03:23:00", 3, 23, 0)]
+        [DataRow("15:09:41", 15, 9, 41)]
+        public void ToString(string text, int Hours, int Minutes, int Seconds)
         {
             Time t = new Time(Hours, Minutes, Seconds);
             Assert.AreEqual(text, t.ToString());
         }
 
         [DataTestMethod, TestCategory("ToString")]
-        [DataRow((byte)0,  (byte)0,  (byte)0)]
-        [DataRow((byte)23, (byte)59, (byte)59)]
-        [DataRow((byte)23, (byte)59, (byte)0)]
-        [DataRow((byte)7,  (byte)23, (byte)5)]
-        [DataRow((byte)14, (byte)3,  (byte)34)]
-        [DataRow((byte)3,  (byte)23, (byte)0)]
-        [DataRow((byte)15, (byte)9,  (byte)41)]
-        public void ToString_Pass_String_Constructor(byte Hours, byte Minutes, byte Seconds)
+        [DataRow(0,0,0)]
+        [DataRow(23,59,59)]
+        [DataRow(23,59,0)]
+        [DataRow(7,23,5)]
+        [DataRow(14,3,34)]
+        [DataRow(3,23,0)]
+        [DataRow(15,9,41)]
+        public void ToString_Pass_String_Constructor(int Hours, int Minutes, int Seconds)
         {
             Time t1 = new Time(Hours, Minutes, Seconds);
             Time t2 = new Time(t1.ToString());
-            AssertTime(t2, Hours, Minutes, Seconds);
+            AssertTime(t2, (byte)Hours, (byte)Minutes, (byte)Seconds);
         }
 
         #endregion
@@ -505,48 +505,48 @@ namespace UnitTests
         }
 
         [DataTestMethod, TestCategory("Constructors")]
-        [DataRow((byte)0, (byte)0, (byte)0,      (byte)0,   (byte)0,  (byte)0,  0)]
-        [DataRow((byte)154, (byte)18, (byte)9,   (byte)154, (byte)18, (byte)9,  ((154 * 3600) + (18 * 60) + 9) )]
-        [DataRow((byte)14, (byte)54, (byte)38,   (byte)14,  (byte)54, (byte)38, ((14 * 3600) + (54 * 60) + 38) )]
-        [DataRow((byte)7, (byte)27, (byte)51,    (byte)7,   (byte)27, (byte)51, ((7*3600)+(27*60)+51) )]
-        public void Constructor_3Parameters(byte hours, byte minutes, byte seconds, byte expectedH, byte expectedM, byte expectedS, long expectedDurationInS)
+        [DataRow(0,0,0,      0,0,0,     0)]
+        [DataRow(154,18,9,   154,18,9,  ((154 * 3600) + (18 * 60) + 9) )]
+        [DataRow(14,54,38,   14,54,38,  ((14 * 3600) + (54 * 60) + 38) )]
+        [DataRow(7,27,51,    7,27,51,   ((7*3600)+(27*60)+51) )]
+        public void Constructor_3Parameters(int hours, int minutes, int seconds, int expectedH, int expectedM, int expectedS, long expectedDurationInS)
         {
-            TimePeriod tp = new TimePeriod(hours, minutes, seconds);
-            AssertTimePeriod(tp, expectedH, expectedM, expectedS, expectedDurationInS);
+            TimePeriod tp = new TimePeriod((byte)hours, (byte)minutes, (byte)seconds);
+            AssertTimePeriod(tp, (byte)expectedH, (byte)expectedM, (byte)expectedS, expectedDurationInS);
         }
         
         [DataTestMethod, TestCategory("Constructors")]
-        [DataRow((byte)0, (byte)0,      (byte)0,   (byte)0,  0)]
-        [DataRow((byte)154, (byte)18,   (byte)154, (byte)18, ((154 * 3600) + (18 * 60)) )]
-        [DataRow((byte)14, (byte)54,    (byte)14,  (byte)54, ((14 * 3600) + (54 * 60)) )]
-        [DataRow((byte)7, (byte)27,     (byte)7,   (byte)27, ((7 * 3600) + (27 * 60)) )]
-        public void Constructor_2Parameters(byte hours, byte minutes, byte expectedH, byte expectedM, long expectedDurationInS)
+        [DataRow(0,0,      0,0,      0)]
+        [DataRow(154,18,   154,18,   ((154 * 3600) + (18 * 60)) )]
+        [DataRow(14,54,    14,54,    ((14 * 3600) + (54 * 60)) )]
+        [DataRow(7,27,     7,27,     ((7 * 3600) + (27 * 60)) )]
+        public void Constructor_2Parameters(int hours, int minutes, int expectedH, int expectedM, long expectedDurationInS)
         {
-            TimePeriod tp = new TimePeriod(hours, minutes);
-            AssertTimePeriod(tp, expectedH, expectedM, 0, expectedDurationInS);
+            TimePeriod tp = new TimePeriod((byte)hours, (byte)minutes);
+            AssertTimePeriod(tp, (byte)expectedH, (byte)expectedM, 0, expectedDurationInS);
         }
 
         [DataTestMethod, TestCategory("Constructors")]
-        [DataRow((byte)0,   (byte)0,  (byte)0,  0)]
-        [DataRow((byte)154, (byte)18, (byte)9,  ((154 * 3600) + (18 * 60) + 9) )]
-        [DataRow((byte)14,  (byte)54, (byte)38, ((14 * 3600) + (54 * 60) + 38) )]
-        [DataRow((byte)7,   (byte)27, (byte)51, ((7*3600)+(27*60)+51) )]
-        public void Constructor_1Parameter(byte expectedH, byte expectedM, byte expectedS, long DurationInSeconds)
+        [DataRow(0,0,0,      0)]
+        [DataRow(154,18,9,   ((154 * 3600) + (18 * 60) + 9) )]
+        [DataRow(14,54,38,   ((14 * 3600) + (54 * 60) + 38) )]
+        [DataRow(7,27,51,    ((7*3600)+(27*60)+51) )]
+        public void Constructor_1Parameter(int expectedH, int expectedM, int expectedS, long DurationInSeconds)
         {
             TimePeriod tp = new TimePeriod(DurationInSeconds);
-            AssertTimePeriod(tp, expectedH, expectedM, expectedS, DurationInSeconds);
+            AssertTimePeriod(tp, (byte)expectedH, (byte)expectedM, (byte)expectedS, DurationInSeconds);
         }
 
         [DataTestMethod, TestCategory("Constructors")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        [DataRow((byte)0,  (byte)0,  (byte)60)]
-        [DataRow((byte)0,  (byte)60, (byte)0)]
-        [DataRow((byte)0,  (byte)60, (byte)60)]
-        [DataRow((byte)15, (byte)48, (byte)69)]
-        [DataRow((byte)15, (byte)69, (byte)48)]
-        public void Constructor_3Parameters_ArgumentOutOfRangeException(byte hours, byte minutes, byte seconds)
+        [DataRow(0,0, 60)]
+        [DataRow(0,60,0)]
+        [DataRow(0,60,60)]
+        [DataRow(15,48,69)]
+        [DataRow(15,69,48)]
+        public void Constructor_3Parameters_ArgumentOutOfRangeException(int hours, int minutes, int seconds)
         {
-            TimePeriod tp = new TimePeriod(hours, minutes, seconds);
+            TimePeriod tp = new TimePeriod((byte)hours, (byte)minutes, (byte)seconds);
         }
 
         [DataTestMethod, TestCategory("Constructors")]
@@ -651,6 +651,63 @@ namespace UnitTests
         {
             TimePeriod tp = new TimePeriod(text);
         }
+
+        #endregion
+
+
+        #region ToString ====================================================
+
+        [DataTestMethod, TestCategory("ToString")]
+        [DataRow("00:00:00",    0,0,0)]
+        [DataRow("23:59:59",    23,59,59)]
+        [DataRow("23:59:00",    23,59,0)]
+        [DataRow("07:23:05",    7,23,5)]
+        [DataRow("14:03:34",    14,3,34)]
+        [DataRow("03:23:00",    3,23,0)]
+        [DataRow("15:09:41",    15,9,41)]
+        [DataRow("115:09:41",   115,9,41)]
+        public void ToString(string text, int Hours, int Minutes, int Seconds)
+        {
+            TimePeriod tp = new TimePeriod((byte)Hours, (byte)Minutes, (byte)Seconds);
+            Assert.AreEqual(text, tp.ToString());
+        }
+        
+        [DataTestMethod, TestCategory("ToString")]
+        [DataRow(0,0,0)]
+        [DataRow(23,59,59)]
+        [DataRow(23,59,0)]
+        [DataRow(7,23,5)]
+        [DataRow(14,3,34)]
+        [DataRow(3,23,0)]
+        [DataRow(15,9,41)]
+        [DataRow(115,9,41)]
+        public void ToString_Pass_String_Constructor(int Hours, int Minutes, int Seconds)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)Hours, (byte)Minutes, (byte)Seconds);
+            TimePeriod tp2 = new TimePeriod(tp1.ToString());
+            AssertTimePeriod(tp2, (byte)Hours, (byte)Minutes, (byte)Seconds);
+        }
+
+        #endregion
+
+
+        #region Equatable ====================================================
+
+        //Todo
+
+        #endregion
+
+
+        #region Comparable ====================================================
+
+        //Todo
+
+        #endregion
+
+
+        #region Operators ====================================================
+
+        //Todo
 
         #endregion
     }
