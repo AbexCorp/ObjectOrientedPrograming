@@ -347,6 +347,7 @@ namespace UnitTests
             Time t2 = new Time(h2, m2, s2);
             Assert.IsTrue(t1.CompareTo(t2) < 0);
         }
+
         #endregion
 
 
@@ -693,21 +694,237 @@ namespace UnitTests
 
         #region Equatable ====================================================
 
-        //Todo
+        [TestMethod, TestCategory("Equatable")]
+        public void Equal_SameReference()
+        {
+            TimePeriod tp1 = new TimePeriod(16, 5, 17);
+            Assert.IsTrue(tp1.Equals(tp1));
+        }
+
+        [DataTestMethod, TestCategory("Equatable")]
+        [DataRow(0, 0, 0)]
+        [DataRow(1, 5, 7)]
+        [DataRow(18, 26, 14)]
+        [DataRow(11, 39, 51)]
+        [DataRow(6, 42, 21)]
+        public void Equal_IsEqual(int hour, int minute, int second)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)hour, (byte)minute, (byte)second);
+            TimePeriod tp2 = new TimePeriod((byte)hour, (byte)minute, (byte)second);
+            Assert.IsTrue(tp1.Equals(tp2));
+            Assert.IsTrue(tp2.Equals(tp1));
+        }
+
+        [DataTestMethod, TestCategory("Equatable")]
+        [DataRow(0,0,0,     0,0,1)]
+        [DataRow(0,0,0,     0,1,0)]
+        [DataRow(0,0,0,     0,1,1)]
+        [DataRow(0,0,0,     1,0,0)]
+        [DataRow(0,0,0,     1,0,1)]
+        [DataRow(0,0,0,     1,1,0)]
+        [DataRow(0,0,0,     1,1,1)]
+        [DataRow(21,48,15,  8,17,58)]
+        [DataRow(16,21,34,  15,8,23)]
+        public void Equal_IsNotEqual(int h1, int m1, int s1, int h2, int m2, int s2)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)h1, (byte)m1, (byte)s1);
+            TimePeriod tp2 = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            Assert.IsFalse(tp1.Equals(tp2));
+            Assert.IsFalse(tp2.Equals(tp1));
+        }
 
         #endregion
 
 
         #region Comparable ====================================================
 
-        //Todo
+        [TestMethod, TestCategory("Comparable")]
+        public void CompareTo_SameReference()
+        {
+            TimePeriod tp = new TimePeriod(16, 5, 17);
+            Assert.AreEqual(tp.CompareTo(tp), 0);
+        }
+
+        [DataTestMethod, TestCategory("Comparable")]
+        [DataRow(0, 0, 0)]
+        [DataRow(0, 0, 1)]
+        [DataRow(0, 1, 0)]
+        [DataRow(0, 1, 1)]
+        [DataRow(1, 0, 0)]
+        [DataRow(1, 0, 1)]
+        [DataRow(1, 1, 0)]
+        [DataRow(1, 1, 1)]
+        public void CompareTo_IsEqual(int hour, int minute, int second)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)hour, (byte)minute, (byte)second);
+            TimePeriod tp2 = new TimePeriod((byte)hour, (byte)minute, (byte)second);
+            Assert.IsTrue(tp1.CompareTo(tp2) == 0);
+            Assert.IsTrue(tp2.CompareTo(tp1) == 0);
+        }
+
+        [DataTestMethod, TestCategory("Comparable")]
+        [DataRow(0,0,0,     0,0,1)]
+        [DataRow(0,0,0,     0,1,0)]
+        [DataRow(0,0,0,     0,1,1)]
+        [DataRow(0,0,0,     1,0,0)]
+        [DataRow(0,0,0,     1,0,1)]
+        [DataRow(0,0,0,     1,1,0)]
+        [DataRow(0,0,0,     1,1,1)]
+        [DataRow(14,34,12,  18,17,5)]
+        [DataRow(6,14,35,   8,46,7)]
+        [DataRow(15,57,27,  21,29,13)]
+        public void CompareTo_IsBigger(int h1, int m1, int s1, int h2, int m2, int s2)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)h1, (byte)m1, (byte)s1);
+            TimePeriod tp2 = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            Assert.IsTrue(tp2.CompareTo(tp1) > 0);
+        }
+
+        [DataTestMethod, TestCategory("Comparable")]
+        [DataRow(0,0,0,     0,0,1)]
+        [DataRow(0,0,0,     0,1,0)]
+        [DataRow(0,0,0,     0,1,1)]
+        [DataRow(0,0,0,     1,0,0)]
+        [DataRow(0,0,0,     1,0,1)]
+        [DataRow(0,0,0,     1,1,0)]
+        [DataRow(0,0,0,     1,1,1)]
+        [DataRow(14,34,12,  18,17,5)]
+        [DataRow(6,14,35,   8,46,7)]
+        [DataRow(15,57,27,  21,29,13)]
+        public void CompareTo_IsSmaller(int h1, int m1, int s1, int h2, int m2, int s2)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)h1, (byte)m1, (byte)s1);
+            TimePeriod tp2 = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            Assert.IsTrue(tp1.CompareTo(tp2) < 0);
+        }
 
         #endregion
 
 
         #region Operators ====================================================
 
-        //Todo
+        [TestMethod, TestCategory("Operators")]
+        public void Operator_Equal_NotEqual_SameReference()
+        {
+            TimePeriod tp1 = new TimePeriod(16, 5, 17);
+            #pragma warning disable CS1718 // Comparison made to same variable
+            Assert.IsTrue(tp1 == tp1);
+            Assert.IsFalse(tp1 != tp1);
+            #pragma warning restore CS1718 // Comparison made to same variable
+        }
+
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(0, 0, 0)]
+        [DataRow(0, 0, 1)]
+        [DataRow(0, 1, 0)]
+        [DataRow(0, 1, 1)]
+        [DataRow(1, 0, 0)]
+        [DataRow(1, 0, 1)]
+        [DataRow(1, 1, 0)]
+        [DataRow(1, 1, 1)]
+        public void Operator_Equal_NotEqual_IsEqual(int hour, int minute, int second)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)hour, (byte)minute, (byte)second);
+            TimePeriod tp2 = new TimePeriod((byte)hour, (byte)minute, (byte)second);
+            Assert.IsTrue(tp1 == tp2);
+            Assert.IsTrue(tp2 == tp1);
+            Assert.IsFalse(tp1 != tp2);
+            Assert.IsFalse(tp2 != tp1);
+        }
+
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(0,0,0,     0,0,1)]
+        [DataRow(0,0,0,     0,1,0)]
+        [DataRow(0,0,0,     0,1,1)]
+        [DataRow(0,0,0,     1,0,0)]
+        [DataRow(0,0,0,     1,0,1)]
+        [DataRow(0,0,0,     1,1,0)]
+        [DataRow(0,0,0,     1,1,1)]
+        [DataRow(14,34,12,  18,17,5)]
+        [DataRow(6,14,35,   8,46,7)]
+        [DataRow(15,57,27,  21,29,13)]
+        public void Operator_Equal_NotEqual_IsNotEqual(int h1, int m1, int s1, int h2, int m2, int s2)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)h1, (byte)m1, (byte)s1);
+            TimePeriod tp2 = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            Assert.IsTrue(tp1 != tp2);
+            Assert.IsTrue(tp2 != tp1);
+            Assert.IsFalse(tp1 == tp2);
+            Assert.IsFalse(tp2 == tp1);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void Operator_GreaterThan_LessThan_SameReference()
+        {
+            TimePeriod tp1 = new TimePeriod(16, 5, 17);
+            #pragma warning disable CS1718 // Comparison made to same variable
+            Assert.IsFalse(tp1 > tp1);
+            Assert.IsFalse(tp1 < tp1);
+            #pragma warning restore CS1718 // Comparison made to same variable
+        }
+
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(0,0,0,     0,0,1)]
+        [DataRow(0,0,0,     0,1,0)]
+        [DataRow(0,0,0,     0,1,1)]
+        [DataRow(0,0,0,     1,0,0)]
+        [DataRow(0,0,0,     1,0,1)]
+        [DataRow(0,0,0,     1,1,0)]
+        [DataRow(0,0,0,     1,1,1)]
+        [DataRow(14,34,12,  18,17,5)]
+        [DataRow(6,14,35,   8,46,7)]
+        [DataRow(15,57,27,  21,29,13)]
+        public void Operator_GreaterThan_LessThan(int h1, int m1, int s1, int h2, int m2, int s2)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)h1, (byte)m1, (byte)s1);
+            TimePeriod tp2 = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            Assert.IsTrue(tp1 < tp2);
+            Assert.IsFalse(tp2 < tp1);
+            Assert.IsFalse(tp1 > tp2);
+            Assert.IsTrue(tp2 > tp1);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void Operator_GreaterThanOrEqual_LessThanOrEqual_SameReference()
+        {
+            TimePeriod tp1 = new TimePeriod(16, 5, 17);
+            #pragma warning disable CS1718 // Comparison made to same variable
+            Assert.IsTrue(tp1 >= tp1);
+            Assert.IsTrue(tp1 <= tp1);
+            #pragma warning restore CS1718 // Comparison made to same variable
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void Operator_GreaterThanOrEqual_LessThanOrEqual_IsEqual()
+        {
+            TimePeriod tp1 = new TimePeriod(16, 5, 17);
+            TimePeriod tp2 = new TimePeriod(16, 5, 17);
+            Assert.IsTrue(tp1 >= tp2);
+            Assert.IsTrue(tp2 >= tp1);
+            Assert.IsTrue(tp1 <= tp2);
+            Assert.IsTrue(tp2 <= tp1);
+        }
+
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(0,0,0,     0,0,1)]
+        [DataRow(0,0,0,     0,1,0)]
+        [DataRow(0,0,0,     0,1,1)]
+        [DataRow(0,0,0,     1,0,0)]
+        [DataRow(0,0,0,     1,0,1)]
+        [DataRow(0,0,0,     1,1,0)]
+        [DataRow(0,0,0,     1,1,1)]
+        [DataRow(14,34,12,  18,17,5)]
+        [DataRow(6,14,35,   8,46,7)]
+        [DataRow(15,57,27,  21,29,13)]
+        public void Operator_GreaterThanOrEqual_LessThanOrEqual_IsDifferent(int h1, int m1, int s1, int h2, int m2, int s2)
+        {
+            TimePeriod tp1 = new TimePeriod((byte)h1, (byte)m1, (byte)s1);
+            TimePeriod tp2 = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            Assert.IsTrue(tp1 <= tp2);
+            Assert.IsFalse(tp2 <= tp1);
+            Assert.IsFalse(tp1 >= tp2);
+            Assert.IsTrue(tp2 >= tp1);
+        }
 
         #endregion
     }
