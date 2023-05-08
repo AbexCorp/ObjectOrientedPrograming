@@ -139,5 +139,37 @@ namespace TimeTimePeriod.Structures
         {
             return t1.CompareTo(t2) <= 0 ? true : false;
         }
+        public static TimePeriod operator +(TimePeriod t1, TimePeriod t2)
+        {
+            return t1.Plus(t2);
+        }
+        public static TimePeriod operator -(TimePeriod t1, TimePeriod t2)
+        {
+            return t1.Minus(t2);
+        }
+
+
+
+
+        // <<< Plus/Minus >>>
+        public TimePeriod Plus(TimePeriod tp) 
+        {
+            return new TimePeriod(_seconds + tp.DurationInSeconds);
+        }
+        public TimePeriod Minus(TimePeriod tp)
+        {
+            long seconds = _seconds - tp.DurationInSeconds;
+            if(seconds < 0)
+                seconds = 0;
+            return new TimePeriod(seconds);
+        }
+        public static TimePeriod Plus(TimePeriod tp1, TimePeriod tp2)
+        {
+            return tp1.Plus(tp2);
+        }
+        public static TimePeriod Minus(TimePeriod tp1, TimePeriod tp2)
+        {
+            return tp1.Minus(tp2);
+        }
     }
 }
