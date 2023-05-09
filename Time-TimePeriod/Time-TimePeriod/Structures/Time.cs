@@ -166,9 +166,45 @@ namespace TimeTimePeriod.Structures
         {
             return t1.CompareTo(t2) <= 0 ? true : false;
         }
+        public static Time operator +(Time t, TimePeriod tp) => t.Plus(tp);
+        public static Time operator -(Time t, TimePeriod tp) => t.Minus(tp);
 
-        //Plus
-        //Minus
-        //Rest?
+
+
+        // <<< Plus/Minus >>>
+        public Time Plus(TimePeriod tp)
+        {
+            long totalSeconds = new TimePeriod(Hours, Minutes, Seconds).DurationInSeconds;
+
+            if(tp.DurationInSeconds < (60*60*24))//avoid overflow
+                totalSeconds = totalSeconds + tp.DurationInSeconds;
+            else
+                totalSeconds = totalSeconds + (tp.DurationInSeconds % (60 * 60 * 24));
+
+            if (totalSeconds >= (60 * 60 * 24))
+                totalSeconds = totalSeconds % (60 * 60 * 24);
+            TimePeriod temp = new TimePeriod(totalSeconds);
+            return new Time(temp.Hours, temp.Minutes, temp.Seconds);
+
+        }
+        public Time Minus(TimePeriod tp)
+        {
+            long totalSeconds = new TimePeriod(Hours, Minutes, Seconds).DurationInSeconds;
+            totalSeconds = totalSeconds - tp.DurationInSeconds;
+            while (totalSeconds < 0)
+                totalSeconds = totalSeconds + (60 * 60 * 24);
+            if(totalSeconds >= (60 * 60 * 24))
+                totalSeconds = totalSeconds % (60 * 60 * 24);
+            TimePeriod temp = new TimePeriod(totalSeconds);
+            return new Time(temp.Hours, temp.Minutes, temp.Seconds);
+        }
+        public static Time Plus(Time t, TimePeriod tp)
+        {
+            return t.Plus(tp);
+        }
+        public static Time Minus(Time t, TimePeriod tp)
+        {
+            return t.Minus(tp);
+        }
     }
 }

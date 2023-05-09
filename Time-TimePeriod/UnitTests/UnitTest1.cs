@@ -476,6 +476,105 @@ namespace UnitTests
             Assert.IsTrue(t2 >= t1);
         }
 
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(00,00,00,  00,00,00,   00,00,00)]
+        [DataRow(00,00,00,  00,00,01,   00,00,01)]
+        [DataRow(00,00,00,  00,01,00,   00,01,00)]
+        [DataRow(00,00,00,  00,01,01,   00,01,01)]
+        [DataRow(00,00,00,  01,00,00,   01,00,00)]
+        [DataRow(00,00,00,  01,00,01,   01,00,01)]
+        [DataRow(00,00,00,  01,01,00,   01,01,00)]
+        [DataRow(00,00,00,  01,01,01,   01,01,01)]
+
+        [DataRow(00,00,00,  26,54,37,   02,54,37)]
+        [DataRow(12,30,15,  05,29,45,   18,00,00)]
+        [DataRow(02,22,02,  58,10,38,   12,32,40)]
+        public void Operator_Add_TimePeriod(int h1, int m1, int s1, int h2, int m2, int s2, int expectedH, int expectedM, int expectedS)
+        {
+            Time t = new Time(h1, m1, s1);
+            TimePeriod tp = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            AssertTime((t+tp), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+        }
+
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(00,00,00,  00,00,00,   00,00,00)]
+        [DataRow(00,00,00,  00,00,01,   23,59,59)]
+        [DataRow(00,00,00,  00,01,00,   23,59,00)]
+        [DataRow(00,00,00,  01,00,00,   23,00,00)]
+
+        [DataRow(12,00,00,  00,00,01,   11,59,59)]
+        [DataRow(12,00,00,  00,01,00,   11,59,00)]
+        [DataRow(12,00,00,  00,01,01,   11,58,59)]
+        [DataRow(12,00,00,  01,00,00,   11,00,00)]
+        [DataRow(12,00,00,  01,00,01,   10,59,59)]
+        [DataRow(12,00,00,  01,01,00,   10,59,00)]
+        [DataRow(12,00,00,  01,01,01,   10,58,59)]
+
+        [DataRow(12,00,00,  26,54,37,   09,05,23)]
+        [DataRow(12,30,15,  05,29,45,   07,00,30)]
+        [DataRow(02,22,02,  58,10,38,   16,11,24)]
+        [DataRow(13,15,31,  00,00,00,   13,15,31)]
+        public void Operator_Subtract_TimePeriod(int h1, int m1, int s1, int h2, int m2, int s2, int expectedH, int expectedM, int expectedS)
+        {
+            Time t = new Time(h1, m1, s1);
+            TimePeriod tp = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            AssertTime((t-tp), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+        }
+
+        #endregion
+
+
+        #region TimePeriodOperations ====================================================
+
+        [DataTestMethod, TestCategory("TimePeriodOperations")]
+        [DataRow(00,00,00,  00,00,00,   00,00,00)]
+        [DataRow(00,00,00,  00,00,01,   00,00,01)]
+        [DataRow(00,00,00,  00,01,00,   00,01,00)]
+        [DataRow(00,00,00,  00,01,01,   00,01,01)]
+        [DataRow(00,00,00,  01,00,00,   01,00,00)]
+        [DataRow(00,00,00,  01,00,01,   01,00,01)]
+        [DataRow(00,00,00,  01,01,00,   01,01,00)]
+        [DataRow(00,00,00,  01,01,01,   01,01,01)]
+
+        [DataRow(00,00,00,  26,54,37,   02,54,37)]
+        [DataRow(12,30,15,  05,29,45,   18,00,00)]
+        [DataRow(02,22,02,  58,10,38,   12,32,40)]
+        public void Plus(int h1, int m1, int s1, int h2, int m2, int s2, int expectedH, int expectedM, int expectedS)
+        {
+            Time t = new Time(h1, m1, s1);
+            TimePeriod tp = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            AssertTime(t.Plus(tp), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+            AssertTime(t.Plus(tp), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+            AssertTime(Time.Plus(t, tp), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+            AssertTime(Time.Plus(t, tp), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+        }
+
+        [DataTestMethod, TestCategory("TimePeriodOperations")]
+        [DataRow(00,00,00,  00,00,00,   00,00,00)]
+        [DataRow(00,00,00,  00,00,01,   23,59,59)]
+        [DataRow(00,00,00,  00,01,00,   23,59,00)]
+        [DataRow(00,00,00,  01,00,00,   23,00,00)]
+
+        [DataRow(12,00,00,  00,00,01,   11,59,59)]
+        [DataRow(12,00,00,  00,01,00,   11,59,00)]
+        [DataRow(12,00,00,  00,01,01,   11,58,59)]
+        [DataRow(12,00,00,  01,00,00,   11,00,00)]
+        [DataRow(12,00,00,  01,00,01,   10,59,59)]
+        [DataRow(12,00,00,  01,01,00,   10,59,00)]
+        [DataRow(12,00,00,  01,01,01,   10,58,59)]
+
+        [DataRow(12,00,00,  26,54,37,   09,05,23)]
+        [DataRow(12,30,15,  05,29,45,   07,00,30)]
+        [DataRow(02,22,02,  58,10,38,   16,11,24)]
+        [DataRow(13,15,31,  00,00,00,   13,15,31)]
+        public void Minus(int h1, int m1, int s1, int h2, int m2, int s2, int expectedH, int expectedM, int expectedS)
+        {
+            Time t = new Time(h1, m1, s1);
+            TimePeriod tp = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
+            AssertTime(t.Minus(tp), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+            AssertTime(Time.Minus(t, tp), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+        }
+
         #endregion
     }
 
@@ -942,10 +1041,8 @@ namespace UnitTests
         {
             TimePeriod tp1 = new TimePeriod((byte)h1, (byte)m1, (byte)s1);
             TimePeriod tp2 = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
-            AssertTimePeriod(tp1.Plus(tp2), (byte)expectedH, (byte)expectedM, (byte)expectedS);
-            AssertTimePeriod(tp2.Plus(tp1), (byte)expectedH, (byte)expectedM, (byte)expectedS);
-            AssertTimePeriod(TimePeriod.Plus(tp1, tp2), (byte)expectedH, (byte)expectedM, (byte)expectedS);
-            AssertTimePeriod(TimePeriod.Plus(tp2, tp1), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+            AssertTimePeriod((tp1+tp2), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+            AssertTimePeriod((tp2+tp1), (byte)expectedH, (byte)expectedM, (byte)expectedS);
         }
 
         [DataTestMethod, TestCategory("Operators")]
@@ -970,8 +1067,7 @@ namespace UnitTests
         {
             TimePeriod tp1 = new TimePeriod((byte)h1, (byte)m1, (byte)s1);
             TimePeriod tp2 = new TimePeriod((byte)h2, (byte)m2, (byte)s2);
-            AssertTimePeriod(tp1.Minus(tp2), (byte)expectedH, (byte)expectedM, (byte)expectedS);
-            AssertTimePeriod(TimePeriod.Minus(tp1, tp2), (byte)expectedH, (byte)expectedM, (byte)expectedS);
+            AssertTimePeriod((tp1-tp2), (byte)expectedH, (byte)expectedM, (byte)expectedS);
         }
 
         #endregion
@@ -1002,7 +1098,6 @@ namespace UnitTests
         }
 
         [DataTestMethod, TestCategory("TimePeriodOperations")]
-
         [DataRow(00,00,00,  00,00,00,   00,00,00)]
         [DataRow(00,00,00,  00,00,01,   00,00,00)]
         [DataRow(00,00,00,  00,01,00,   00,00,00)]
