@@ -13,7 +13,7 @@ namespace km.Collections.MultiZbior
     /// </remarks>
     /// <typeparam name="T">dowolny typ, bez ograniczeń</typeparam>
 
-    public interface IMultiSet<T> : ICollection<T>, IEnumerable<T>
+    public interface IMultiSet<T> : ICollection<T>, IEnumerable<T> where T : notnull
     {
 
         #region === from ICollection<T> ============================================
@@ -159,26 +159,38 @@ namespace km.Collections.MultiZbior
         /*
         // Konstruktor, tworzy pusty multizbiór
         public MultiSet();
+        */
 
+        /*
         // Konstruktor, tworzy pusty multizbiór, w którym równość elementów zdefiniowana jest
         // za pomocą obiektu `comparer`
         public MultiSet(IEqualityComparer<T> comparer)
+        */
 
+        /*
         // Konstruktor, tworzy multizbiór wczytując wszystkie elementy z `sequence`
         public MultiSet(IEnumerable<T> sequence)
+        */
 
+        /*
         // Konstruktor, tworzy multizbiór wczytując wszystkie elementy z `sequence`
         // Równośc elementów zdefiniowana jest za pomocą obiektu `comparer`
         public MultiSet(IEnumerable<T> sequence, IEqualityComparer<T> comparer)
+        */
 
+        /*
         // tworzy nowy multizbiór jako sumę multizbiorów `first` i `second`
         // zwraca `ArgumentNullException`, jeśli którykolwiek z parametrów jest `null`
         public static IMultiSet<T> operator +(IMultiSet<T> first, IMultiSet<T> second);
+        */
 
+        /*
         // tworzy nowy multizbiór jako różnicę multizbiorów: od `first` odejmuje `second`
         // zwraca `ArgumentNullException`, jeśli którykolwiek z parametrów jest `null`
         public static IMultiSet<T> operator -(IMultiSet<T> first, IMultiSet<T> second);
+        */
 
+        /*
         // tworzy nowy multizbiór jako część wspólną multizbiorów `first` oraz `second`
         // zwraca `ArgumentNullException`, jeśli którykolwiek z parametrów jest `null`
         public static IMultiSet<T> operator *(IMultiSet<T> first, IMultiSet<T> second);
