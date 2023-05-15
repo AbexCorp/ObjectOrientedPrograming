@@ -156,40 +156,47 @@ namespace km.Collections.MultiZbior
         // zwraca pusty multizbiór
         public static IMultiSet<T> Empty { get; }
 
+        //public MultiSet();
         /*
         // Konstruktor, tworzy pusty multizbiór
         public MultiSet();
         */
 
+        //public MultiSet(IEqualityComparer<T> comparer)
         /*
         // Konstruktor, tworzy pusty multizbiór, w którym równość elementów zdefiniowana jest
         // za pomocą obiektu `comparer`
         public MultiSet(IEqualityComparer<T> comparer)
         */
 
+        //public MultiSet(IEnumerable<T> sequence)
         /*
         // Konstruktor, tworzy multizbiór wczytując wszystkie elementy z `sequence`
         public MultiSet(IEnumerable<T> sequence)
         */
 
+        //public MultiSet(IEnumerable<T> sequence, IEqualityComparer<T> comparer)
         /*
         // Konstruktor, tworzy multizbiór wczytując wszystkie elementy z `sequence`
         // Równośc elementów zdefiniowana jest za pomocą obiektu `comparer`
         public MultiSet(IEnumerable<T> sequence, IEqualityComparer<T> comparer)
         */
 
+        //public static IMultiSet<T> operator +(IMultiSet<T> first, IMultiSet<T> second);
         /*
         // tworzy nowy multizbiór jako sumę multizbiorów `first` i `second`
         // zwraca `ArgumentNullException`, jeśli którykolwiek z parametrów jest `null`
         public static IMultiSet<T> operator +(IMultiSet<T> first, IMultiSet<T> second);
         */
 
+        //public static IMultiSet<T> operator -(IMultiSet<T> first, IMultiSet<T> second);
         /*
         // tworzy nowy multizbiór jako różnicę multizbiorów: od `first` odejmuje `second`
         // zwraca `ArgumentNullException`, jeśli którykolwiek z parametrów jest `null`
         public static IMultiSet<T> operator -(IMultiSet<T> first, IMultiSet<T> second);
         */
 
+        //public static IMultiSet<T> operator *(IMultiSet<T> first, IMultiSet<T> second);
         /*
         // tworzy nowy multizbiór jako część wspólną multizbiorów `first` oraz `second`
         // zwraca `ArgumentNullException`, jeśli którykolwiek z parametrów jest `null`

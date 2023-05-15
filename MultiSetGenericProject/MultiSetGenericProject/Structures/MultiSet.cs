@@ -14,9 +14,21 @@ namespace MultiSetGeneric.Structures
 
         private Dictionary<T, int> _multiSet = new Dictionary<T, int>();
 
+
         public static MultiSet<T> Empty { get { return new MultiSet<T>(); } }
 
+
+        #region <<< Constructors >>>
+
         public MultiSet() {}
+
+        public MultiSet(IEnumerable<T> sequence)
+        {
+            this.UnionWith(sequence);
+        }
+
+
+        #endregion
 
 
         #region <<< ICollection<T> >>>
@@ -109,7 +121,6 @@ namespace MultiSetGeneric.Structures
 
         #region <<< ExpandedCollection >>>
 
-
         public MultiSet<T> Add (T item, int numberOfItems = 1)
         {
             ThrowExceptionIfIsReadOnly();
@@ -149,6 +160,50 @@ namespace MultiSetGeneric.Structures
 
             foreach (T item in other)
                 this.Add(item);
+            return this;
+        }
+        public MultiSet<T> IntersectWith(IEnumerable<T> other)
+        {
+            ThrowExceptionIfIsReadOnly();
+            if (other is null)
+                throw new ArgumentNullException();
+
+            MultiSet<T> intersectedSet = new MultiSet<T>();
+            foreach (T item in other)
+            {
+                if (this.Contains(item))
+                {
+                    intersectedSet.Add(item);
+                    this.Remove(item);
+                }
+            }
+
+            this.Clear();
+            _multiSet = intersectedSet._multiSet;
+            return this;
+        }
+        // modyfikuje bieżący multizbiór tak, aby zawierał tylko te 
+        // które nie wystepują w `other`
+        // zgłasza `ArgumentNullException` jeśli `other` jest `null`
+        // zgłasza `NotSupportedException` jeśli multizbior jest tylko do odczytu
+        // zwraca referencję tej instancji multizbioru (`this`)
+        public MultiSet<T> ExceptWith(IEnumerable<T> other)
+        {
+            ThrowExceptionIfIsReadOnly();
+            if (other is null)
+                throw new ArgumentNullException();
+
+            MultiSet<T> exceptedSet = new MultiSet<T>();
+            foreach (T item in this)
+            {
+                //This needs to treat each element as different thing.
+                //for example (1,1,2,3,3,3,4,5) and (1,2,2,3)
+                //should give (1,3,3,4,5)    removed [1,2,3]
+                //and not (4,5)              removed [1,1,2,3,3,3]
+
+                //if(!other.Contains(item))
+                    //exceptedSet.Add(item);
+            }
             return this;
         }
 
