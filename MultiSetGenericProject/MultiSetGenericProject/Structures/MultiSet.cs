@@ -18,6 +18,28 @@ namespace MultiSetGeneric.Structures
         public static MultiSet<T> Empty { get { return new MultiSet<T>(); } }
 
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder("");
+            foreach (var (k, v) in _multiSet)
+            {
+                for(int i = 0; i < v; i++)
+                {
+                    sb.Append(k + " ");
+                }
+            }
+            return sb.ToString();
+        }
+        public string ToStringShort()
+        {
+            StringBuilder sb = new StringBuilder("");
+            foreach(var k in _multiSet.Keys)
+            {
+                sb.AppendLine(k.ToString() + " " + _multiSet[k]);
+            }
+            return sb.ToString().Trim();
+        }
+
         #region <<< Constructors >>>
 
         public MultiSet() {}
@@ -42,7 +64,7 @@ namespace MultiSetGeneric.Structures
                 {
                     counter = counter + item.Value;
                 }
-                return _multiSet.Count; 
+                return counter;
             } 
         }
 
@@ -174,7 +196,7 @@ namespace MultiSetGeneric.Structures
                 if (this.Contains(item))
                 {
                     intersectedSet.Add(item);
-                    this.Remove(item);
+                    this.Remove(item, 1);
                 }
             }
 
@@ -182,11 +204,6 @@ namespace MultiSetGeneric.Structures
             _multiSet = intersectedSet._multiSet;
             return this;
         }
-        // modyfikuje bieżący multizbiór tak, aby zawierał tylko te 
-        // które nie wystepują w `other`
-        // zgłasza `ArgumentNullException` jeśli `other` jest `null`
-        // zgłasza `NotSupportedException` jeśli multizbior jest tylko do odczytu
-        // zwraca referencję tej instancji multizbioru (`this`)
         public MultiSet<T> ExceptWith(IEnumerable<T> other)
         {
             ThrowExceptionIfIsReadOnly();
@@ -194,15 +211,33 @@ namespace MultiSetGeneric.Structures
                 throw new ArgumentNullException();
 
             MultiSet<T> exceptedSet = new MultiSet<T>();
-            foreach (T item in this)
+            foreach (T item in other)
             {
-                //This needs to treat each element as different thing.
-                //for example (1,1,2,3,3,3,4,5) and (1,2,2,3)
-                //should give (1,3,3,4,5)    removed [1,2,3]
-                //and not (4,5)              removed [1,1,2,3,3,3]
+                if (this.Contains(item))
+                    this.Remove(item, 1);
+                else
+                    exceptedSet.Add(item);
+            }
+            return this;
+        }
+        // modyfikuje bieżący multizbiór tak, aby zawierał tylko te elementy
+        // które wystepują w `other` lub występują w bieżacym multizbiorze,
+        // ale nie wystepują równocześnie w obu
+        // zgłasza `ArgumentNullException` jeśli `other` jest `null`
+        // zgłasza `NotSupportedException` jeśli multizbior jest tylko do odczytu
+        // zwraca referencję tej instancji multizbioru (`this`)
+        public MultiSet<T> SymmetricExceptWith(IEnumerable<T> other)
+        {
+            ThrowExceptionIfIsReadOnly();
+            if (other is null)
+                throw new ArgumentNullException();
 
-                //if(!other.Contains(item))
-                    //exceptedSet.Add(item);
+            foreach (T item in other)
+            {
+                if (this.Contains(item))
+                    this.Remove(item, 1);
+                else
+                    this.Add(item, 1);
             }
             return this;
         }
@@ -217,6 +252,12 @@ namespace MultiSetGeneric.Structures
             T[] values = new T[this.Count];
             this.CopyTo(values, 0);
             return values;
+        }
+        private MultiSet<T> GetCopyOfThis()
+        {
+            MultiSet<T> copy = new MultiSet<T>();
+            copy._multiSet = new Dictionary<T, int>(this._multiSet);
+            return copy;
         }
 
         #endregion
