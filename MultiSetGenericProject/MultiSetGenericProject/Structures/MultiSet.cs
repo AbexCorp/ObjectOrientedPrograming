@@ -9,36 +9,17 @@ using km.Collections.MultiZbior;
 
 namespace MultiSetGeneric.Structures
 {
-    public class MultiSet<T> : ICollection<T>, IEnumerable<T> /*: IMultiSet<T>*/ where T : notnull
+    public class MultiSet<T> : IMultiSet<T> where T : notnull
     {
+
+        #region <<< Basics >>>
 
         private Dictionary<T, int> _multiSet = new Dictionary<T, int>();
 
-
         public static MultiSet<T> Empty { get { return new MultiSet<T>(); } }
 
+        #endregion
 
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder("");
-            foreach (var (k, v) in _multiSet)
-            {
-                for(int i = 0; i < v; i++)
-                {
-                    sb.Append(k + " ");
-                }
-            }
-            return sb.ToString();
-        }
-        public string ToStringShort()
-        {
-            StringBuilder sb = new StringBuilder("");
-            foreach(var k in _multiSet.Keys)
-            {
-                sb.AppendLine(k.ToString() + " " + _multiSet[k]);
-            }
-            return sb.ToString().Trim();
-        }
 
         #region <<< Constructors >>>
 
@@ -49,6 +30,19 @@ namespace MultiSetGeneric.Structures
             this.UnionWith(sequence);
         }
 
+        public MultiSet(IEqualityComparer<T> comparer)
+        {
+            _multiSet = new Dictionary<T, int>(comparer);
+        }
+
+        public MultiSet(IEnumerable<T> sequence, IEqualityComparer<T> comparer)
+        {
+            _multiSet = new Dictionary<T, int>(comparer);
+            foreach(T item in sequence)
+            {
+                this.Add(item);
+            }
+        }
 
         #endregion
 
@@ -141,7 +135,7 @@ namespace MultiSetGeneric.Structures
         #endregion
 
 
-        #region <<< ExpandedCollection >>>
+        #region <<< IMultiSet / ExpandedCollection >>>
 
         public MultiSet<T> Add (T item, int numberOfItems = 1)
         {
@@ -177,8 +171,7 @@ namespace MultiSetGeneric.Structures
         public MultiSet<T> UnionWith (IEnumerable<T> other)
         {
             ThrowExceptionIfIsReadOnly();
-            if(other is null)
-                throw new ArgumentNullException();
+            ThrowExceptionIfIsNull(other);
 
             foreach (T item in other)
                 this.Add(item);
@@ -187,8 +180,7 @@ namespace MultiSetGeneric.Structures
         public MultiSet<T> IntersectWith(IEnumerable<T> other)
         {
             ThrowExceptionIfIsReadOnly();
-            if (other is null)
-                throw new ArgumentNullException();
+            ThrowExceptionIfIsNull(other);
 
             MultiSet<T> intersectedSet = new MultiSet<T>();
             foreach (T item in other)
@@ -207,8 +199,7 @@ namespace MultiSetGeneric.Structures
         public MultiSet<T> ExceptWith(IEnumerable<T> other)
         {
             ThrowExceptionIfIsReadOnly();
-            if (other is null)
-                throw new ArgumentNullException();
+            ThrowExceptionIfIsNull(other);
 
             MultiSet<T> exceptedSet = new MultiSet<T>();
             foreach (T item in other)
@@ -220,17 +211,10 @@ namespace MultiSetGeneric.Structures
             }
             return this;
         }
-        // modyfikuje bieżący multizbiór tak, aby zawierał tylko te elementy
-        // które wystepują w `other` lub występują w bieżacym multizbiorze,
-        // ale nie wystepują równocześnie w obu
-        // zgłasza `ArgumentNullException` jeśli `other` jest `null`
-        // zgłasza `NotSupportedException` jeśli multizbior jest tylko do odczytu
-        // zwraca referencję tej instancji multizbioru (`this`)
         public MultiSet<T> SymmetricExceptWith(IEnumerable<T> other)
         {
             ThrowExceptionIfIsReadOnly();
-            if (other is null)
-                throw new ArgumentNullException();
+            ThrowExceptionIfIsNull(other);
 
             foreach (T item in other)
             {
@@ -241,12 +225,125 @@ namespace MultiSetGeneric.Structures
             }
             return this;
         }
+        public bool IsSubsetOf(IEnumerable<T> other)
+        {
+            ThrowExceptionIfIsNull(other);
+
+            MultiSet<T> ms = new MultiSet<T>(other);
+            foreach(T item in this)
+            {
+                if (ms.Contains(item))
+                    ms.Remove(item, 1);
+                else
+                    return false;
+            }
+            return true;
+        }
+        public bool IsProperSubsetOf(IEnumerable<T> other)
+        {
+            if ( (this.IsSubsetOf(new MultiSet<T>(other))) && (this.Count != new MultiSet<T>(other).Count) )
+                return true;
+            return false;
+        }
+        public bool IsSupersetOf(IEnumerable<T> other)
+        {
+            return (new MultiSet<T>(other).IsSubsetOf(this));
+        }
+        public bool IsProperSupersetOf(IEnumerable<T> other)
+        {
+            return ( (this.IsSupersetOf(other)) && (this.Count != new MultiSet<T>(other).Count) );
+        }
+        public bool Overlaps(IEnumerable<T> other)
+        {
+            ThrowExceptionIfIsNull(other);
+
+            foreach(T item in other)
+            {
+                if(this.Contains(item))
+                    return true;
+            }
+            return false;
+        }
+        public bool MultiSetEquals(IEnumerable<T> other)
+        {
+            ThrowExceptionIfIsNull(other);
+
+            MultiSet<T> msOther = new MultiSet<T>(other);
+            if(this.Count != msOther.Count) 
+                return false;
+            foreach(T item in this)
+            {
+                if (msOther.Contains(item))
+                    msOther.Remove(item, 1);
+            }
+            if (msOther.Count != 0)
+                return false;
+            return true;
+        }
+        public bool IsEmpty { get { return this.Count == 0 ? true : false; } }
+
+        public IEqualityComparer<T> Comparer => _multiSet.Comparer;
+
+        #endregion
+
+
+        #region <<< More IMultiSet >>>
+
+        public int this[T item] { get { return _multiSet[item]; } }
+
+        public IReadOnlyDictionary<T, int> AsDictionary()
+        {
+            return GetCopyOfThis()._multiSet;
+        }
+
+        public IReadOnlySet<T> AsSet()
+        {
+            HashSet<T> set = new HashSet<T>();
+
+            foreach(T item in this)
+            {
+                set.Add(item);
+            }
+            return set;
+        }
+
+        #endregion
+
+
+        #region <<< Operators >>>
+
+        public static MultiSet<T> operator +(MultiSet<T> first, MultiSet<T> second)
+        {
+            ThrowExceptionIfIsNull(first);
+            ThrowExceptionIfIsNull(second);
+            
+            return GetCopyOfThat(first).UnionWith(GetCopyOfThat(second));
+        }
+        public static MultiSet<T> operator -(MultiSet<T> first, MultiSet<T> second)
+        {
+            ThrowExceptionIfIsNull(first);
+            ThrowExceptionIfIsNull(second);
+
+            return GetCopyOfThat(first).ExceptWith(GetCopyOfThat(second));
+        }
+        public static MultiSet<T> operator *(MultiSet<T> first, MultiSet<T> second)
+        {
+            ThrowExceptionIfIsNull(first);
+            ThrowExceptionIfIsNull(second);
+
+            return GetCopyOfThat(first).IntersectWith(GetCopyOfThat(second));
+        }
 
         #endregion
 
 
         #region <<< Tools >>>
 
+        private static void ThrowExceptionIfIsNull(IEnumerable<T> other)
+        {
+            if (other is null)
+                throw new ArgumentNullException();
+        }
         private T[] GetArrayOfThis()
         {
             T[] values = new T[this.Count];
@@ -259,7 +356,37 @@ namespace MultiSetGeneric.Structures
             copy._multiSet = new Dictionary<T, int>(this._multiSet);
             return copy;
         }
+        private static MultiSet<T> GetCopyOfThat(MultiSet<T> other)
+        {
+            MultiSet<T> copy = new MultiSet<T>();
+            copy._multiSet = new Dictionary<T, int>(other._multiSet);
+            return copy;
+        }
+
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder("");
+            foreach (var (k, v) in _multiSet)
+            {
+                for(int i = 0; i < v; i++)
+                {
+                    sb.Append(k + " ");
+                }
+            }
+            return sb.ToString().Trim();
+        }
+        public string ToStringShort()
+        {
+            StringBuilder sb = new StringBuilder("");
+            foreach(var k in _multiSet.Keys)
+            {
+                sb.AppendLine(k.ToString() + " " + _multiSet[k]);
+            }
+            return sb.ToString().Trim();
+        }
 
         #endregion
+
     }
 }
