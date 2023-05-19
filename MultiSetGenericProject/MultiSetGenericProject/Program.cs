@@ -24,29 +24,10 @@ namespace MultiSetGeneric
             ms2.Add('b');
             ms2.Add('c');
 
+
             Console.WriteLine(ms1);
-            Console.WriteLine(ms2);
+            Console.WriteLine(ms1.ToStringShort());
 
-            //ms1.UnionWith(ms2); // [a,a,b,b,b,c,c,c,c]
-            //ms1.IntersectWith(ms2); // [a,b,c]
-            //ms1.ExceptWith(ms2); // [b,c,c]
-            //Console.WriteLine(ms1);
-
-            /*
-            ms1.Clear();
-            ms2.Clear();
-
-            ms1.Add('a', 1);
-            ms1.Add('b', 1);
-            ms1.Add('c', 1);
-
-            ms2.Add('b', 1);
-            ms2.Add('c', 1);
-            ms2.Add('d', 1);
-
-            ms1.SymmetricExceptWith(ms2);
-            Console.WriteLine(ms1);
-            */
             
             
             /*

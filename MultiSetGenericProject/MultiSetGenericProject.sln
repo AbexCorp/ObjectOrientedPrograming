@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiSetGenericProject", "MultiSetGenericProject\MultiSetGenericProject.csproj", "{EA18F77B-A7FC-4D77-827C-311BC59071F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiSetGenericProject", "MultiSetGenericProject\MultiSetGenericProject.csproj", "{EA18F77B-A7FC-4D77-827C-311BC59071F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{7511F7DE-456B-4C07-B1E5-30BA63C848A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{EA18F77B-A7FC-4D77-827C-311BC59071F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA18F77B-A7FC-4D77-827C-311BC59071F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA18F77B-A7FC-4D77-827C-311BC59071F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7511F7DE-456B-4C07-B1E5-30BA63C848A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7511F7DE-456B-4C07-B1E5-30BA63C848A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7511F7DE-456B-4C07-B1E5-30BA63C848A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7511F7DE-456B-4C07-B1E5-30BA63C848A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

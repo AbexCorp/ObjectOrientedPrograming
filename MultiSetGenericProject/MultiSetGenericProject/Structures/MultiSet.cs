@@ -11,10 +11,12 @@ namespace MultiSetGeneric.Structures
 {
     public class MultiSet<T> : IMultiSet<T> where T : notnull
     {
-
+        
         #region <<< Basics >>>
 
         private Dictionary<T, int> _multiSet = new Dictionary<T, int>();
+
+        public Dictionary<T, int> Dictionary { get { return _multiSet; } }
 
         public static MultiSet<T> Empty { get { return new MultiSet<T>(); } }
 
@@ -151,6 +153,8 @@ namespace MultiSetGeneric.Structures
         {
             ThrowExceptionIfIsReadOnly();
 
+            if(numberOfItems <=0)
+                return this;
             if (!this.Contains(item))
                 return this;
             if (numberOfItems >= _multiSet[item])
