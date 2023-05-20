@@ -272,6 +272,9 @@ namespace MultiSetGeneric.Structures
         {
             ThrowExceptionIfIsNull(other);
 
+            if(ReferenceEquals(this, other))
+                return true;
+
             MultiSet<T> msOther = new MultiSet<T>(other);
             if(this.Count != msOther.Count) 
                 return false;
@@ -293,7 +296,14 @@ namespace MultiSetGeneric.Structures
 
         #region <<< More IMultiSet >>>
 
-        public int this[T item] { get { return _multiSet[item]; } }
+        public int this[T item] { 
+            get 
+            {
+                if (!this.Contains(item))
+                    return 0;
+                return _multiSet[item]; 
+            } 
+        }
 
         public IReadOnlyDictionary<T, int> AsDictionary()
         {
