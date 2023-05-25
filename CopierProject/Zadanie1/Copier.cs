@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 using ver1;
 
 namespace Zadanie1
@@ -29,7 +33,7 @@ namespace Zadanie1
         {
             if (state == IDevice.State.on) 
                 return;
-            _counter = _counter + 1;
+            _counter++;
             state = IDevice.State.on;
         }
 
