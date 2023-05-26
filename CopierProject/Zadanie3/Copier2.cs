@@ -4,18 +4,23 @@ using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using ver1;
 
 namespace Zadanie3
 {
-    public class Printer : BaseDevice, IPrinter
+    internal class Copier : BaseDevice, IPrinter, IScanner
     {
+        public Copier() 
+        {
+            _printer.PowerOff();
+            _scanner.PowerOff();
+        }
 
         #region <<< Variables >>>
 
         private int _counter = 0;
-        private int _printCounter = 0;
+        private Printer _printer = new Printer();
+        private Scanner _scanner = new Scanner();
 
         #endregion
 
@@ -23,7 +28,8 @@ namespace Zadanie3
         #region <<< Properties >>>
 
         new public int Counter { get { return _counter; } } //zwraca liczbę uruchomień kserokopiarki
-        public int PrintCounter { get { return _printCounter; } } //zwraca aktualną liczbę wydrukowanych dokumentów,
+        public int ScanCounter => _scanner.ScanCounter;
+        public int PrintCounter => _printer.PrintCounter;
 
         private bool IsTurnedOn
         {
@@ -64,17 +70,26 @@ namespace Zadanie3
         #endregion
 
 
-        #region <<< IPrinter >>>
+        #region <<< IPrinter, IScanner >>>
 
         public void Print(in IDocument document)
         {
-            if(IsTurnedOff)
+            if (IsTurnedOff)
                 return;
-
-            Console.WriteLine($"{DateTime.Now.ToString()} Print: {document.GetFileName()}");
-            _printCounter++;
+            throw new NotImplementedException();
         }
 
+        public void Scan(out IDocument document, IDocument.FormatType formatType)
+        {
+            document = null;
+            if (IsTurnedOff)
+                return;
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region <<< B >>>
         #endregion
     }
 }

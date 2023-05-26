@@ -11,6 +11,7 @@ namespace Zadanie3
 {
     public class Scanner : BaseDevice, IScanner
     {
+
         #region <<< Variables >>>
 
         private int _counter = 0;
@@ -24,7 +25,7 @@ namespace Zadanie3
         new public int Counter { get { return _counter; } } //zwraca liczbę uruchomień kserokopiarki
         public int ScanCounter { get {  return _scanCounter; } } //zwraca liczbę zeskanowanych dokumentów,
 
-        private bool IsTurnedOn 
+        private bool IsTurnedOn
         {
             get
             {
@@ -63,9 +64,43 @@ namespace Zadanie3
         #endregion
 
 
+        #region <<< IScanner >>>
+
         public void Scan(out IDocument document, IDocument.FormatType formatType)
         {
-            throw new NotImplementedException();
+            document = null; //?
+            if(IsTurnedOff)
+                return;
+
+            string filename = $"{formatType.ToString().ToUpper()}Scan{ScanCounter}.{formatType.ToString().ToLower()}"; //Not perfect
+            switch (formatType)
+            {
+                case IDocument.FormatType.TXT:
+                    document = new TextDocument(filename);
+                    break;
+                case IDocument.FormatType.PDF:
+                    document = new PDFDocument(filename);
+                    break;
+                case IDocument.FormatType.JPG:
+                    document = new ImageDocument(filename);
+                    break;
+                default:
+                    return;
+            }
+
+            Console.WriteLine($"{DateTime.Now.ToString()} Scan: {filename}");
+            _scanCounter++;
+            return;
         }
+        public void Scan(out IDocument document)
+        {
+            document = null; //?
+            if(IsTurnedOff)
+                return;
+
+            Scan(out document, IDocument.FormatType.JPG);
+        }
+
+        #endregion
     }
 }
