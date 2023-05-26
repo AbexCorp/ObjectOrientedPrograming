@@ -14,9 +14,9 @@ namespace Zadanie2
         /// </summary>
         /// <param name="document">obiekt typu IDocument, różny od `null`</param>
         /// <param name="receiver">obiekt typu IFax, różny od `null`</param>
-        public void Fax(IDocument document, IFax receiver);
+        public void SendFax(IDocument document, IFax receiver);
 
-        public void Receive(IDocument document, in IFax sender, out bool received);
+        public void ReceiveFax(IDocument document, in IFax sender, out bool received);
 
         public int FaxNumber { get; init; }
     }

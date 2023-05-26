@@ -70,7 +70,7 @@ namespace ver1UnitTests
                 copier.Print(in doc1);
                 Assert.IsTrue(consoleOutput.GetOutput().Contains("Print"));
             }
-            Assert.AreEqual(currentConsoleOut, Console.Out);   
+            Assert.AreEqual(currentConsoleOut, Console.Out);
         }
 
         // weryfikacja, czy po wywołaniu metody `Print` i wyłączonej kopiarce w napisie NIE pojawia się słowo `Print`

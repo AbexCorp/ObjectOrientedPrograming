@@ -16,7 +16,8 @@ namespace Program
     {
         public static void Main()
         {
-            /* Zadanie1
+            //Zadanie1
+            /*
             var xerox = new Copier();
             xerox.PowerOn();
             IDocument doc1 = new PDFDocument("aaa.pdf");
@@ -30,19 +31,32 @@ namespace Program
             System.Console.WriteLine( xerox.PrintCounter );
             System.Console.WriteLine( xerox.ScanCounter );
             */
+            
 
-            /* Zadanie2
-            code to test multifunctional device here
-            */
-            Fax f1 = new Fax();
-            Fax f2 = new Fax();
+            //Zadanie2
+            /*
+            MultifunctionalDevice f1 = new MultifunctionalDevice();
+            MultifunctionalDevice f2 = new MultifunctionalDevice();
 
-            TextDocument t = new TextDocument("as.txt");
+            TextDocument t = new TextDocument("testFile.txt");
 
             f1.PowerOn();
             f2.PowerOn();
 
-            f1.Fax
+            Console.WriteLine(f1.SendCounter + " " + f1.ReceiveCounter);
+            Console.WriteLine(f2.SendCounter + " " + f2.ReceiveCounter);
+
+            f1.SendFax(t, f2);
+
+            Console.WriteLine(f1.SendCounter + " " + f1.ReceiveCounter);
+            Console.WriteLine(f2.SendCounter + " " + f2.ReceiveCounter);
+
+            f2.PowerOff();
+            f1.SendFax(t, f2);
+
+            Console.WriteLine(f1.SendCounter + " " + f1.ReceiveCounter);
+            Console.WriteLine(f2.SendCounter + " " + f2.ReceiveCounter);
+            */
         }
     }
 }

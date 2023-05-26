@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopierProject", "CopierProject\CopierProject.csproj", "{49B928A5-CDE0-41DB-A2DD-B93C986D7A36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CopierProject", "CopierProject\CopierProject.csproj", "{49B928A5-CDE0-41DB-A2DD-B93C986D7A36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zadanie1", "Zadanie1\Zadanie1.csproj", "{382BC93B-7211-4B92-952A-8CA3E5E77563}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zadanie1", "Zadanie1\Zadanie1.csproj", "{382BC93B-7211-4B92-952A-8CA3E5E77563}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zadanie1 UnitTests", "Zadanie1 UnitTests\Zadanie1 UnitTests.csproj", "{17BA84C7-734D-4A82-995D-1F31E52C91FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zadanie1 UnitTests", "Zadanie1 UnitTests\Zadanie1 UnitTests.csproj", "{17BA84C7-734D-4A82-995D-1F31E52C91FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zadanie2", "Zadanie2\Zadanie2.csproj", "{34B17AEB-07E4-4CAA-B3DF-C16078CB12CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zadanie2", "Zadanie2\Zadanie2.csproj", "{34B17AEB-07E4-4CAA-B3DF-C16078CB12CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zadanie2 UnitTests", "Zadanie2 UnitTests\Zadanie2 UnitTests.csproj", "{0776A813-5C1D-4180-A71F-9CA7DB4A3921}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{34B17AEB-07E4-4CAA-B3DF-C16078CB12CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34B17AEB-07E4-4CAA-B3DF-C16078CB12CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34B17AEB-07E4-4CAA-B3DF-C16078CB12CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0776A813-5C1D-4180-A71F-9CA7DB4A3921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0776A813-5C1D-4180-A71F-9CA7DB4A3921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0776A813-5C1D-4180-A71F-9CA7DB4A3921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0776A813-5C1D-4180-A71F-9CA7DB4A3921}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
