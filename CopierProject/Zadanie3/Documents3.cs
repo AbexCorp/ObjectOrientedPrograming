@@ -1,6 +1,6 @@
 using System;
 
-namespace ver1
+namespace ver3
 {
     public interface IDocument
     {

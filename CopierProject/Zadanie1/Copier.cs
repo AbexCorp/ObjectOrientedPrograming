@@ -48,6 +48,7 @@ namespace Zadanie1
 
 
         #region <<< IPrinter IScaner >>>
+
         public void Print(in IDocument document)
         {
             if(state == IDevice.State.off) 

@@ -1,6 +1,6 @@
 using System;
 
-namespace ver1
+namespace ver3
 {
     public interface IDevice
     {
@@ -50,4 +50,17 @@ namespace ver1
         void Scan(out IDocument document, IDocument.FormatType formatType);
     }
 
+    public interface IFax : IDevice
+    {
+        /// <summary>
+        /// Dokument jest wysyłany do podanego Faxu, jeśli urządzenie włączone. W przeciwnym przypadku nic się nie wykonuje
+        /// </summary>
+        /// <param name="document">obiekt typu IDocument, różny od `null`</param>
+        /// <param name="receiver">obiekt typu IFax, różny od `null`</param>
+        public void SendFax(IDocument document, IFax receiver);
+
+        public void ReceiveFax(IDocument document, in IFax sender, out bool received);
+
+        public int FaxNumber { get; init; }
+    }
 }

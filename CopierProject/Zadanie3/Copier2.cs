@@ -4,11 +4,11 @@ using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ver1;
+using ver3;
 
 namespace Zadanie3
 {
-    internal class Copier : BaseDevice, IPrinter, IScanner
+    public class Copier : BaseDevice, IDevice, IPrinter, IScanner
     {
         public Copier() 
         {
@@ -18,9 +18,9 @@ namespace Zadanie3
 
         #region <<< Variables >>>
 
-        private int _counter = 0;
-        private Printer _printer = new Printer();
-        private Scanner _scanner = new Scanner();
+        protected int _counter = 0;
+        protected Printer _printer = new Printer();
+        protected Scanner _scanner = new Scanner();
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace Zadanie3
         public int ScanCounter => _scanner.ScanCounter;
         public int PrintCounter => _printer.PrintCounter;
 
-        private bool IsTurnedOn
+        protected bool IsTurnedOn
         {
             get
             {
@@ -45,7 +45,7 @@ namespace Zadanie3
                 }
             }
         }
-        private bool IsTurnedOff => !IsTurnedOn;
+        protected bool IsTurnedOff => !IsTurnedOn;
 
         #endregion
 
@@ -76,7 +76,10 @@ namespace Zadanie3
         {
             if (IsTurnedOff)
                 return;
-            throw new NotImplementedException();
+
+            _printer.PowerOn();
+            _printer.Print(in document);
+            _printer.PowerOff();
         }
 
         public void Scan(out IDocument document, IDocument.FormatType formatType)
@@ -84,12 +87,31 @@ namespace Zadanie3
             document = null;
             if (IsTurnedOff)
                 return;
-            throw new NotImplementedException();
+
+            _scanner.PowerOn();
+            _scanner.Scan(out document, formatType);
+            _scanner.PowerOff();
+        }
+
+        public void Scan(out IDocument document)
+        {
+            document = null; //?
+            if(IsTurnedOff)
+                return;
+
+            Scan(out document, IDocument.FormatType.JPG);
+        }
+
+        public void ScanAndPrint()
+        {
+            if(IsTurnedOff)
+                return;
+
+            Scan(out IDocument document, IDocument.FormatType.JPG);
+            Print(document);
         }
 
         #endregion
 
-        #region <<< B >>>
-        #endregion
     }
 }
