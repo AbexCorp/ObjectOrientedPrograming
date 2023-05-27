@@ -68,11 +68,6 @@ namespace TimeTimePeriod.Structures
         /// <returns>long</returns>
         public long DurationInSeconds { get { return _seconds; } }
 
-        /// <summary>
-        /// Maximum value that TimePeriod can store. Equal to 255:59:59
-        /// </summary>
-        public int MaxValue => 921599;
-
         #endregion
 
 

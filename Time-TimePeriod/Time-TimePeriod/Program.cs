@@ -12,7 +12,7 @@ namespace TimeTimePeriod
     {
         static void Main(string[] args)
         {
-            
+
         }
     }
 }
