@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 //using Zadanie1;
 //using ver1;
 
-//using Zadanie2; //Uses ver1
+//using Zadanie2; //Uses ver1 & Zadanie1
 
-using Zadanie3;
-using ver3;
+//using Zadanie3;
+//using ver3;
+
+using Zadanie4;
+using ver4;
 
 
 namespace Program
@@ -103,6 +106,34 @@ namespace Program
             Console.WriteLine(f2.SendCounter + " " + f2.ReceiveCounter);
             */
 
+
+            //Zadanie4
+            Copier copier = new Copier();
+            TextDocument document = new TextDocument("doc.txt");
+
+            copier.PowerOn();
+
+            Console.WriteLine();
+            Console.WriteLine("Printer");
+            copier.Print(document); //1
+            copier.Print(document); //2
+            copier.Print(document); //3
+            copier.Print(document); //standby
+            copier.Print(document); //2
+
+            Console.WriteLine();
+            Console.WriteLine("Scanner");
+            copier.Scan(out IDocument tempDoc); //1
+            copier.Scan(out tempDoc); //2
+            copier.Scan(out tempDoc); //standby
+            copier.Scan(out tempDoc); //2
+
+            Console.WriteLine();
+            Console.WriteLine("Both");
+            copier.ScanAndPrint(); //1 1
+            copier.ScanAndPrint(); //1 1
+            copier.ScanAndPrint(); //1 1
+            copier.ScanAndPrint(); //1 1
         }
     }
 }
