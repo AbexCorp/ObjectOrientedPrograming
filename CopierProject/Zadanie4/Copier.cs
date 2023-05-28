@@ -50,10 +50,32 @@ namespace Zadanie4
 
         #region <<< IDevice >>>
 
-        public void PowerOn() => SetState(IDevice.State.on);
-        public void PowerOff() => SetState(IDevice.State.off);
-        public void StandbyOn() => SetState(IDevice.State.standby);
-        public void StandbyOff() => SetState(IDevice.State.on);
+        public void PowerOn()
+        {
+            if (GetState() == IDevice.State.on)
+                return;
+            SetState(IDevice.State.on);
+            _counter++;
+        }
+        public void PowerOff() 
+        { 
+            if (GetState() == IDevice.State.off)
+                return;
+            SetState(IDevice.State.off);
+        }
+        public void StandbyOn()
+        {
+            if (GetState() == IDevice.State.off)
+                return;
+            SetState(IDevice.State.standby);
+        }
+        public void StandbyOff()
+        {
+            if (GetState() == IDevice.State.off)
+                return;
+            SetState(IDevice.State.on);
+        }
+
 
 
         public IDevice.State GetState()
@@ -65,6 +87,7 @@ namespace Zadanie4
             _printerState = state;
             _scannerState = state;
         }
+
 
         private void SetPrinterState(IDevice.State state)
         {
