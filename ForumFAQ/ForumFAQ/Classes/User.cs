@@ -10,20 +10,52 @@ namespace ForumFAQ.Classes
     public class User
     {
         private readonly string _name;
+        private SortedDictionary<string, Question> _questions = new();
+        private SortedDictionary<string, Answer> _answers = new();
 
         public string Name { get { return _name; } }
 
 
-
-        private static HashSet<string> _allUsers = new();
         public User(string name) 
         {
-            if (name is null || name.Length == 0 || name == null)
-                throw new ArgumentNullException("Name cannot be null");
-            if (_allUsers.Contains(name))
-                throw new ArgumentException("Name Taken");
             _name = name;
-            _allUsers.Add(name);
+            OnNewAnswerAdded = OnNewAnswerAddedDefault;
+            OnNewQuestionAdded = OnNewQuestionAddedDefault;
         }
+
+
+        public void AddAnswer(Answer answer)
+        {
+            _answers.Add(answer.Id, answer);
+        }
+        public void AddQuestion(Question question)
+        {
+            _questions.Add(question.Id, question);
+        }
+
+
+        #region <<< Notifications >>>
+
+        public EventHandler OnNewAnswerAdded;
+        public void OnNewAnswerAddedDefault(object sender, EventArgs args)
+        {
+            Question.AnswerEventArgs args1 = (Question.AnswerEventArgs)args;
+            if(!_questions.ContainsKey(args1.QuestionId))
+                Console.WriteLine($"User {args1.AnsweringUser} answered {args1.AnswerId} to question {args1.QuestionId} by {args1.NameOP}");
+            else
+                Console.WriteLine($"User {args1.AnsweringUser} answered {args1.AnswerId} to your question {args1.QuestionId}");
+        }
+
+        public EventHandler OnNewQuestionAdded;
+        public void OnNewQuestionAddedDefault(object sender, EventArgs args)
+        {
+            Forum.QuestionEventArgs args1 = (Forum.QuestionEventArgs)args;
+            Console.WriteLine($"User {args1.QuestionUser} asked new question {args1.QuestionId}");
+        }
+
+        #endregion
+
+        //Download all questions of user
     }
+    //Forum statistics class
 }

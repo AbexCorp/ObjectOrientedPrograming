@@ -10,54 +10,76 @@ namespace ForumFAQ.Classes
 {
     public class Question// : IObservable<User>
     {
+        public class AnswerEventArgs : EventArgs
+        {
+            public string NameOP { get; }
+            public string QuestionId { get; }
+            public string AnsweringUser { get; }
+            public string AnswerId { get; }
+            public string AnswerText { get; }
+            public AnswerEventArgs(string nameOP,string questionId, string answeringUser, string answerId, string answerText)
+            {
+                NameOP = nameOP; QuestionId = questionId; AnsweringUser = answeringUser; AnswerId = answerId; AnswerText = answerText;
+            }
+        }
+        public event EventHandler AnswerAdded = null;
+
+
+        #region <<< Variables & Properties >>> 
+
         private string _id;
         private string _message;
+        private string _username;
         private SortedDictionary<string, Answer> _answers = new();
 
 
         public string Id { get { return _id; } }
         public string Message { get { return _message; } }
+        public string Username { get { return _username; } }
+
+        public int NumberOfAnswers { get { return _answers.Count; } }
 
 
+        public SortedDictionary<string, Answer> DownloadAllAnswers { get { return new SortedDictionary<string, Answer>(_answers); } }
+
+        #endregion
+
+
+        #region <<< Constructors >>>
 
         private static int s_idCounter = 0;
-        public Question(string text)
+        public Question(string text, User user, Forum forum)
         {
+            if(user is null)
+                throw new ArgumentNullException("user");
+
             _id = $"Q{s_idCounter}";
             s_idCounter++;
 
             if (text is null || text.Length == 0 || text == null)
                 _message = "";
             else _message = text;
+            _username = user.Name;
+
+            AnswerAdded += forum.OnAnswerAdded;
         }
-        public Question() : this("") { }
+        public Question(User user, Forum forum) : this("", user, forum) { }
+
+        #endregion
 
 
-        public void AddAnswer(string answerText) //User user    also needed
+        #region <<< Functions >>>
+
+        public void AddAnswer(string answerText, User user)
         {
-            //Answer newAnswer = new Answer(answerText);
-            //_answers.Add(newAnswer.Id, newAnswer);
-            Console.WriteLine( Calculator(1,2,3, Sum) );
-            Console.WriteLine( Calculator(1,2,3, Sub) );
-            Console.WriteLine( Calculator(1,2,3, Mul) );
-            Console.WriteLine( Calculator(1,2,3, (x,y,z) => y*z-x ));
-            throw new NotImplementedException();
+            Answer newAnswer = new Answer(answerText, user);
+            _answers.Add(newAnswer.Id, newAnswer);
+            user.AddAnswer(newAnswer);
+            AnswerEventArgs notification = new AnswerEventArgs(Username ,Id, user.Name, newAnswer.Id, newAnswer.Message);
+            AnswerAdded?.Invoke(this, notification);
         }
+        //Download Question and answers
 
-
-
-
-
-
-
-        public delegate int Calculate(int x, int y, int z);
-        public int Calculator(int x, int y, int z, Calculate c)
-        {
-            return c(x, y, z);
-        }
-
-        public int Sum(int x, int y, int z) { return x + y + z; }
-        public int Sub(int x, int y, int z) { return x- y - z; }
-        public int Mul(int x, int y, int z) { return x*y*z; }
+        #endregion
     }
 }
