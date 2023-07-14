@@ -31,15 +31,20 @@ namespace ForumFAQ.Classes
         public int NumberOfQuestions { get {  return _questions.Count; } }
         public SortedDictionary<string, Question> DownloadAllQuestions { get { return new SortedDictionary<string, Question>(_questions); } }
 
+        public ForumStatistics stats;
+
         public Forum() 
         {
+            stats = new ForumStatistics(this);
             OnAnswerAdded = OnAnswerAddedDefault;
+            NewAnswerForum += stats.OnNewAnswerAdded;
+            NewQuestion += stats.OnNewQuestionAdded;
         }
 
         #endregion
 
 
-        //Download all questions and answers
+        #region <<< Functions >>>
 
         public User CreateNewUser(string username)
         {
@@ -60,6 +65,33 @@ namespace ForumFAQ.Classes
             NewQuestion?.Invoke(this, notification);
             return newQuestion;
         }
+        public SortedDictionary<string, Question> DownloadAllUserQuestions(User user)
+        {
+            return user.DownloadAllQuestions;
+        }
+        public SortedDictionary<string, Answer> DownloadAllUserAnswers(User user)
+        {
+            return user.DownloadAllAnswers;
+        }
+        public void PrintWholeForum()
+        {
+            foreach(var question in _questions)
+            {
+                Console.WriteLine($"{question.Value.Id} {question.Value.Username}");
+                Console.WriteLine($"{question.Value.Message}");
+                Console.WriteLine();
+                foreach(var answer in question.Value.DownloadAllAnswers)
+                {
+                    Console.WriteLine($"    {answer.Value.Id} {answer.Value.Username}");
+                    Console.WriteLine($"    {answer.Value.Message}");
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+        }
+
+        #endregion
 
 
         #region <<< Subscribing >>>

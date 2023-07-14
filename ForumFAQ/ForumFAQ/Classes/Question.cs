@@ -78,7 +78,6 @@ namespace ForumFAQ.Classes
             AnswerEventArgs notification = new AnswerEventArgs(Username ,Id, user.Name, newAnswer.Id, newAnswer.Message);
             AnswerAdded?.Invoke(this, notification);
         }
-        //Download Question and answers
 
         #endregion
     }

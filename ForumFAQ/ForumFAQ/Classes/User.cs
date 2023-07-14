@@ -14,6 +14,8 @@ namespace ForumFAQ.Classes
         private SortedDictionary<string, Answer> _answers = new();
 
         public string Name { get { return _name; } }
+        public SortedDictionary<string, Question> DownloadAllQuestions { get { return new SortedDictionary<string, Question>(_questions); } }
+        public SortedDictionary<string, Answer> DownloadAllAnswers { get { return new SortedDictionary<string, Answer>(_answers); } }
 
 
         public User(string name) 
@@ -24,6 +26,7 @@ namespace ForumFAQ.Classes
         }
 
 
+
         public void AddAnswer(Answer answer)
         {
             _answers.Add(answer.Id, answer);
@@ -32,6 +35,7 @@ namespace ForumFAQ.Classes
         {
             _questions.Add(question.Id, question);
         }
+
 
 
         #region <<< Notifications >>>
@@ -55,7 +59,5 @@ namespace ForumFAQ.Classes
 
         #endregion
 
-        //Download all questions of user
     }
-    //Forum statistics class
 }
