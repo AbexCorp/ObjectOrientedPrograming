@@ -11,7 +11,7 @@ namespace NewConcepts
 
 
         //using NewConcepts.DelegateBasics.StockMarket;
-        /*
+
         static void Main(string[] args)
         {
             Console.WriteLine("Stock1 - demo 2");
@@ -44,6 +44,6 @@ namespace NewConcepts
             ibm.Price = 11.001m;
             ibm.Price = 8;
         }
-        */
+
     }
 }
