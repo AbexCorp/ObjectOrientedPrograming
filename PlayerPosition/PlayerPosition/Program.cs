@@ -36,9 +36,7 @@ namespace PlayerPosition
             List<Player> playerList = field.PlayerList.Values.ToList();
 
             //<*>
-            int numberOfSomePlayers = playerNumber / 2;
-            if (numberOfSomePlayers == 0)
-                numberOfSomePlayers = 1;
+            int numberOfSomePlayers = playerNumber / 2 == 0 ? 1 : playerNumber / 2;
             var fewPlayers = playerList;
 
             for(int i = 0; i < 100+(6*playerNumber); i++)
