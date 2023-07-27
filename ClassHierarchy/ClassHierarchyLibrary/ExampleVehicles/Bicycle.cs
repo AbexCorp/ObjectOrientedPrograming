@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ClassHierarchyLibrary.ExampleVehicles
 {
-    public class Van : LandVehicle
+    public class Bicycle : LandVehicle
     {
-        public Van(int horsepower, Engine.EngineFuelType fuelType) : base(numberOfWheels: 4, new Engine(horsepower, fuelType)) { }
+        public Bicycle() : base(numberOfWheels: 2, engine: null) { }
     }
 }
