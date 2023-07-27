@@ -7,59 +7,30 @@ using ClassHierarchyLibrary.ComboVehicleInterfaces;
 
 namespace ClassHierarchyLibrary
 {
-    public class AmphibiousVehicle : LandVehicle, ILandToWater
+    public abstract class AmphibiousVehicle : LandVehicle, ILandToWater
     {
         protected int _buoyancy;
-
         public int Buoyancy { get { return _buoyancy; } }
 
         public void Dock()
         {
-            if (IsOnLand)
+            if (!IsInWater)
                 return;
 
-            _location = Location.Land;
-            _currentSpeed = ChangeSpeedUnit(CurrentSpeedUnit, SpeedUnit.KilometerPerHour, CurrentSpeed) ;
-            _currentSpeedUnit = SpeedUnit.KilometerPerHour;
-            _currentSpeed = SetCorrectSpeed(CurrentSpeed, CurrentSpeedUnit);
+            CurrentLocation = Location.Land;
+            CurrentSpeed = ChangeSpeedUnit(CurrentSpeedUnit, SpeedUnit.KilometerPerHour, CurrentSpeed) ;
+            CurrentSpeedUnit = SpeedUnit.KilometerPerHour;
+            CurrentSpeed = SetCorrectSpeed(CurrentSpeed, CurrentSpeedUnit);
         }
         public void Sail()
         {
-            if (IsInWater)
+            if (!IsOnLand)
                 return;
 
-            _location = Location.Water;
-            _currentSpeed = ChangeSpeedUnit(CurrentSpeedUnit, SpeedUnit.Knots, CurrentSpeed) ;
-            _currentSpeedUnit = SpeedUnit.Knots;
-
-        }
-
-
-        public override void Start()
-        {
-            if (IsInMotion)
-                return;
-
-            _state = VehicleState.Moving;
-            _currentSpeed = 1;
-        }
-        public override void Stop()
-        {
-            if (IsStationary)
-                return;
-
-            _state = VehicleState.Stationary;
-            _currentSpeed = 0;
-        }
-        public override void ChangeSpeed(int speedChange)
-        {
-            if (IsStationary)
-                return;
-            _currentSpeed += speedChange;
-            if(_currentSpeed > s_maximumAllowedLandSpeed)
-                _currentSpeed = s_maximumAllowedLandSpeed;
-            if (_currentSpeed < s_minimumAllowedLandSpeed)
-                _currentSpeed = s_minimumAllowedLandSpeed;
+            CurrentLocation = Location.Water;
+            CurrentSpeed = ChangeSpeedUnit(CurrentSpeedUnit, SpeedUnit.Knots, CurrentSpeed) ;
+            CurrentSpeedUnit = SpeedUnit.Knots;
+            CurrentSpeed = SetCorrectSpeed(CurrentSpeed, CurrentSpeedUnit);
         }
     }
 }
