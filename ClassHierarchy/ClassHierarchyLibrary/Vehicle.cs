@@ -146,5 +146,15 @@ namespace ClassHierarchyLibrary
             }
             throw new ArgumentException("Unit not implemented");
         }
+
+
+        public Vehicle(Engine? engine)
+        {
+            if(!(engine is null))
+                _engine = engine;
+
+            State = VehicleState.Stationary;
+            CurrentSpeed = 0;
+        }
     }
 }

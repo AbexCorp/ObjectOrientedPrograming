@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ClassHierarchyLibrary
 {
-    public class Aircraft : LandVehicle, ILandToAir
+    public abstract class Aircraft : LandVehicle, ILandToAir
     {
         public void Landing()
         {
@@ -52,5 +52,8 @@ namespace ClassHierarchyLibrary
             State = VehicleState.Stationary;
             CurrentSpeed = 0;
         }
+
+
+        public Aircraft(int numberOfWheels, Engine? engine = null) : base(numberOfWheels: numberOfWheels, engine: engine) { }
     }
 }

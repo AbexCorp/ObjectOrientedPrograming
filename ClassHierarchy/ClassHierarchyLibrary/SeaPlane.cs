@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ClassHierarchyLibrary
 {
-    public class SeaPlane : WaterVehicle, IWaterToAir
+    public abstract class SeaPlane : WaterVehicle, IWaterToAir
     {
         public void WaterLanding()
         {
@@ -52,5 +52,7 @@ namespace ClassHierarchyLibrary
             State = VehicleState.Stationary;
             CurrentSpeed = 0;
         }
+
+        public SeaPlane(int buoyancy, Engine? engine = null) : base(buoyancy, engine) { }
     }
 }

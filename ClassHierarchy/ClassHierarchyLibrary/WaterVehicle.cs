@@ -10,5 +10,14 @@ namespace ClassHierarchyLibrary
     {
         protected int _buoyancy;
         public int Buoyancy { get { return _buoyancy; } }
+
+
+        public WaterVehicle(int buoyancy, Engine? engine = null) : base(engine: engine)
+        {
+            _buoyancy = buoyancy;
+
+            CurrentLocation = Location.Water;
+            CurrentSpeedUnit = SpeedUnit.Knots;
+        }
     }
 }

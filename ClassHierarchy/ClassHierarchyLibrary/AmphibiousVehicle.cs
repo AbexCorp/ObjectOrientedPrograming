@@ -32,5 +32,10 @@ namespace ClassHierarchyLibrary
             CurrentSpeedUnit = SpeedUnit.Knots;
             CurrentSpeed = SetCorrectSpeed(CurrentSpeed, CurrentSpeedUnit);
         }
+
+        public AmphibiousVehicle(int buoyancy, int numberOfWheels, Engine? engine = null) : base(numberOfWheels: numberOfWheels, engine: engine)
+        {
+            _buoyancy = buoyancy;
+        }
     }
 }
