@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Xml.Linq;
 //using NewConcepts.DelegateBasics.StockMarket;
 using NewConcepts.DelegateBasics.EventStockMarket;
+using NewConcepts.XML_LINQ;
 
 namespace NewConcepts
 {
     class Program
     {
+        static void Main(string[] args)
+        {
+            ExampleXMLFile.ExampleAttributes();
+        }
 
-
-
-
+        /* Delegates, Events
         //using NewConcepts.DelegateBasics.StockMarket;
 
         static void Main(string[] args)
@@ -44,6 +48,6 @@ namespace NewConcepts
             ibm.Price = 11.001m;
             ibm.Price = 8;
         }
-
+        */
     }
 }
