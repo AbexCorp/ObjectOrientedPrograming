@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Reflection.Emit;
 using System.Xml.Linq;
 
 namespace XMLToLinqToXMLConverter
@@ -33,14 +35,47 @@ namespace XMLToLinqToXMLConverter
                 string[] doi = fullDoi.Split('-', StringSplitOptions.RemoveEmptyEntries);
                 doi = new string[] { doi[doi.Length - 2], doi[doi.Length-1] };
 
-                string enUsTitle = GetArticleTitle(in article);
+                string enUsTitle = GetArticleTitle(in article).Trim();
+                //title prefix (the, a ,an)
                 string enUsText = GetArticleText(in article);
                 string[] enUsKeywords = GetArticleKeywords(in article);
-                //authors
+
+                var authors = article
+                    ?.Descendants("author")
+                    ?.Select(x => 
+                    (
+                        firstname: (x?.Descendants("firstname")?.FirstOrDefault() ?? throw new ArgumentException("First name not found")).Value
+                        ,lastname: (x?.Descendants("lastname")?.FirstOrDefault() ?? throw new ArgumentException("Last name not found")).Value
+                        ,affiliation: (x?.Descendants("affiliation")
+                            ?.FirstOrDefault( z => (z.Attribute("locale") ?? throw new ArgumentException("Locale not found")).Value == "en_US")
+                            ?? throw new ArgumentException("Affiliation not found")).Value
+                        ,email: (x?.Descendants("email")?.FirstOrDefault() ?? throw new ArgumentException("Email not found")).Value
+                        ,country: (x?.Descendants("country")?.FirstOrDefault())?.Value ?? null
+                        ,primaryContact: x?.Attributes().FirstOrDefault(y => y.Name == "primary_contact")?.Value ?? "false"
+                    ));
+                
                 string pages = GetArticlePages(in article);
                 string publishDate = GetArticlePublishDate(in article);
-                //permissions
-                //galley
+
+                var permissions = article
+                    ?.Descendants("permissions")
+                    ?.Select(x =>
+                    (
+                        licenseUrl: x?.Descendants("license_url")
+                        ,copyrightHolder: (x?.Descendants("copyright_holder")
+                            ?.FirstOrDefault( z => (z.Attribute("locale") ?? throw new ArgumentException("Locale not found")).Value == "en_US")
+                            ?? throw new ArgumentException("Copyright holder not found")).Value
+                        ,copyrightYear: (x?.Descendants("copyright_year")?.FirstOrDefault() ?? throw new ArgumentException("Copyright year not found")).Value
+                    ))
+                    .FirstOrDefault();
+
+                var galley = article
+                    ?.Descendants("galley")
+                    ?.Select(x =>
+                    (
+                        label: (x?.Descendants("label").FirstOrDefault() ?? throw new ArgumentException("Label not found")).Value
+                        , fileRemote: (x?.Descendants("file")?.Descendants("remote").Attributes("src").FirstOrDefault() ?? throw new ArgumentException("File source not found")).Value
+                    ));
 
 
 
