@@ -133,7 +133,7 @@ namespace XMLToLinqToXMLConverter
                       new XAttribute("section_ref", sectionRef),
                       new XAttribute("seq", "1"), //DONT KNOW
                       new XAttribute("access_status", "0"), //DONT KNOW
-                      new XAttribute(xsi + "schemaLocation", "http://pkp.sfu.ca native.xsd"), //??????????
+                      new XAttribute(xsi + "schemaLocation", "http://pkp.sfu.ca native.xsd"),
                         new XElement("id",
                           new XAttribute("type", "internal"),
                           new XAttribute("advice", "ignore"),
@@ -161,13 +161,13 @@ namespace XMLToLinqToXMLConverter
                             new XElement("id",
                               new XAttribute("type", "internal"),
                               new XAttribute("advice", "ignore"),
-                              1
+                              1 //DONT KNOW
                             ),
                             new XElement("name",
                               new XAttribute("locale", "en_US"),
                               "HTML"
                             ),
-                            new XElement("seq", 0),
+                            new XElement("seq", 0), //DONT KNOW
                             new XElement("remote",
                               new XAttribute("src", fullDoi)
                             )
