@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Reflection.Emit;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace XMLToLinqToXMLConverter
 {
@@ -23,6 +24,12 @@ namespace XMLToLinqToXMLConverter
                 ?.Descendants("issue")
                 ?.Descendants("section")
                 ?.Descendants("article") ?? throw new ArgumentException("Articles were not found");
+            var sectionRef = (issues
+                ?.Descendants("issue")
+                ?.Descendants("section")
+                ?.Descendants("abbrev")
+                ?.FirstOrDefault(x => (x.Attribute("locale") ?? throw new ArgumentException("Locale not found")).Value == "en_US") ?? throw new ArgumentException("SectionRef not found"))
+                .Value;
 
 
             string fullDoi;
@@ -36,7 +43,9 @@ namespace XMLToLinqToXMLConverter
                 doi = new string[] { doi[doi.Length - 2], doi[doi.Length-1] };
 
                 string enUsTitle = GetArticleTitle(in article).Trim();
-                //title prefix (the, a ,an)
+                string? prefix = GetArticleTitlePrefix(enUsTitle, out string newTitle);
+                enUsTitle = newTitle;
+
                 string enUsText = GetArticleText(in article);
                 string[] enUsKeywords = GetArticleKeywords(in article);
 
@@ -57,17 +66,17 @@ namespace XMLToLinqToXMLConverter
                 string pages = GetArticlePages(in article);
                 string publishDate = GetArticlePublishDate(in article);
 
-                var permissions = article
+                var permissions = (article
                     ?.Descendants("permissions")
                     ?.Select(x =>
                     (
-                        licenseUrl: x?.Descendants("license_url")
+                        licenseUrl: (x?.Descendants("license_url").FirstOrDefault() ?? throw new ArgumentException("License url not found")).Value
                         ,copyrightHolder: (x?.Descendants("copyright_holder")
                             ?.FirstOrDefault( z => (z.Attribute("locale") ?? throw new ArgumentException("Locale not found")).Value == "en_US")
                             ?? throw new ArgumentException("Copyright holder not found")).Value
                         ,copyrightYear: (x?.Descendants("copyright_year")?.FirstOrDefault() ?? throw new ArgumentException("Copyright year not found")).Value
-                    ))
-                    .FirstOrDefault();
+                    )) ?? throw new ArgumentException("Something went wrong with permissions"))
+                    .First();
 
                 var galley = article
                     ?.Descendants("galley")
@@ -82,16 +91,97 @@ namespace XMLToLinqToXMLConverter
 
 
                 //Convert data
-                //newFile = new XDocument(
-                //    new XDeclaration("1.0", "utf-8", "yes"),
-                //    new XElement("Article")
+                XNamespace xNamespace = "http://pkp.sfu.ca";
+                XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
+
+                XElement keywordTags = new XElement("keywords", new XAttribute("locale", "en_US"));
+                foreach(var keyword in enUsKeywords)
+                {
+                    keywordTags.Add(new XElement("keyword", keyword));
+                }
+
+                XElement authorTags = new XElement("authors",
+                  new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"),
+                  new XAttribute(xsi + "schemaLocation", "http://pkp.sfu.ca native.xsd"));
+                foreach(var author in authors)
+                {
+                    XElement newAuthor = new XElement("author",
+                        new XElement("givenname", author.firstname, new XAttribute("locale", "en_US")),
+                        new XElement("familyname", author.lastname, new XAttribute("locale", "en_US")),
+                        new XElement("affiliation", author.affiliation, new XAttribute("locale", "en_US")),
+                        new XElement("email", author.email)
+                    );
+                    if (author.primaryContact == "true")
+                        newAuthor.Add(new XAttribute("primary_contact", "true"));
+                    newAuthor.Add(new XAttribute("include_in_browse", "true"),new XAttribute("user_group_ref", "Author"));
+
+                    if (author.country != null)
+                        (newAuthor.Descendants("email").FirstOrDefault() ?? throw new Exception()).AddBeforeSelf(new XElement("country", author.country));
+
+                    authorTags.Add(newAuthor);
+                }
+
+                newFile = new XDocument(
+                    new XDeclaration("1.0", "utf-8", "yes"),
+                    new XElement(xNamespace + "Article",
+                      new XAttribute("xmlns", "http://pkp.sfu.ca"),
+                      new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"),
+                      new XAttribute("locale", "en_US"),
+                      new XAttribute("date_submitted", "2000-12-25"), //DONT KNOW
+                      new XAttribute("stage", "production"), //DONT KNOW
+                      new XAttribute("date_published", publishDate),
+                      new XAttribute("section_ref", sectionRef),
+                      new XAttribute("seq", "1"), //DONT KNOW
+                      new XAttribute("access_status", "0"), //DONT KNOW
+                      new XAttribute(xsi + "schemaLocation", "http://pkp.sfu.ca native.xsd"), //??????????
+                        new XElement("id",
+                          new XAttribute("type", "internal"),
+                          new XAttribute("advice", "ignore"),
+                          $"{doi[0]}{doi[1]}"
+                        ),
+                        new XElement("title",
+                          new XAttribute("locale", "en_US"),
+                          $"{newTitle}"
+                        ),
+                        new XElement("prefix",
+                          new XAttribute("locale", "en_US"),
+                          $"{prefix}"
+                        ),
+                        new XElement("abstract",
+                          new XAttribute("locale", "en_US"),
+                          $"{enUsText}"
+                        ),
+                        new XElement("licenseUrl", permissions.licenseUrl),
+                        keywordTags,
+                        authorTags,
+                        new XElement("article_galley",
+                          new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"),
+                          new XAttribute(xsi + "schemaLocation", "http://www.w3.org/2001/XMLSchema-instance"),
+                          new XAttribute("aproved", "true"),
+                            new XElement("id",
+                              new XAttribute("type", "internal"),
+                              new XAttribute("advice", "ignore"),
+                              1
+                            ),
+                            new XElement("name",
+                              new XAttribute("locale", "en_US"),
+                              "HTML"
+                            ),
+                            new XElement("seq", 0),
+                            new XElement("remote",
+                              new XAttribute("src", fullDoi)
+                            )
+                        ),
+                        new XElement("issue_identification",
+                            new XElement("volume", volume),
+                            new XElement("number", number),
+                            new XElement("year", year)
+                        ),
+                        new XElement("pages", pages)
+                    )
+                );
+                newFile.Save(Path.Combine(Directory.GetCurrentDirectory(), $"{doi[0]}-{doi[1]}.xml"));
             }
-
-
-
-            //string newfile = Path.Combine(Directory.GetCurrentDirectory(), "issues.xml");
-            //File.CreateText(newfile);
-            //File.AppendAllLines(newfile, issue.ToString().);
         }
 
 
@@ -176,6 +266,19 @@ namespace XMLToLinqToXMLConverter
                 ?.FirstOrDefault() ?? throw new ArgumentException("Publish date not found"))
                 .Value;
             return publishDate;
+        }
+        private static string? GetArticleTitlePrefix(string title, out string newTitle)
+        {
+            string prefix = title.Substring(0, title.IndexOf(' '));
+            if(prefix.Length <= 3 && (prefix.ToLower() == "the" || prefix.ToLower() == "an" || prefix.ToLower() == "a"))
+            {
+                newTitle = title.Remove(0, title.IndexOf(' ')).Trim();
+                string firstLetter = newTitle[0].ToString().ToUpper();
+                newTitle = newTitle.Remove(0, 1).Insert(0, firstLetter);
+                return prefix;
+            }
+            newTitle = title;
+            return null;
         }
     }
 }
