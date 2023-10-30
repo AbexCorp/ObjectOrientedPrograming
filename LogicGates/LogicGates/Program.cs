@@ -6,8 +6,58 @@ namespace LogicGate
     {
         static void Main()
         {
-            ComparatorTester();
+            
         }
+
+        public static string Adder(string numA, string numB)
+        {
+            bool a1 = numA[3] == '1';
+            bool a2 = numA[2] == '1';
+            bool a3 = numA[1] == '1';
+            bool a4 = numA[0] == '1';
+            
+            bool b1 = numB[3] == '1';
+            bool b2 = numB[2] == '1';
+            bool b3 = numB[1] == '1';
+            bool b4 = numB[0] == '1';
+
+
+
+            bool xor1 = a1 ^ b1;
+            bool xor2 = a2 ^ b2;
+            bool xor3 = a3 ^ b3;
+            bool xor4 = a4 ^ b4;
+
+            bool and1 = a1 && b1;
+            bool and2 = a2 && b2;
+            bool and3 = a3 && b3;
+            bool and4 = a4 && b4;
+
+
+            bool xor5 = and1 ^ xor2;
+            bool and5 = and1 && xor2;
+
+            bool or1 = and5 || and2;
+            bool xor6 = or1 ^ xor3;
+            bool and6 = or1 && xor3;
+
+            bool or2 = and6 || and3;
+            bool xor7 = or2 ^ xor4;
+            bool and7 = or2 && xor4;
+            bool or3 = and7 || and4;
+
+
+
+            bool o1 = xor1;
+            bool o2 = xor5;
+            bool o3 = xor6;
+            bool o4 = xor7;
+            bool co = or3;
+
+            return $"{o4}{o3}{o2}{o1}{co}";
+        }
+
+
 
         public static void ComparatorTester() //100 - A<B     010 - A=B     001 - A>B
         {
