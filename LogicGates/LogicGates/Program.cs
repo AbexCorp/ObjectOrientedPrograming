@@ -6,7 +6,52 @@ namespace LogicGate
     {
         static void Main()
         {
-            
+            AdderTest();
+        }
+        public static void AdderTest()
+        {
+            Dictionary<int, string> numbers = new Dictionary<int, string>
+            {
+                { 0, "0000" },
+                { 1, "0001" },
+                { 2, "0010" },
+                { 3, "0011" },
+                { 4, "0100" },
+                { 5, "1011" },
+                { 6, "1100" },
+                { 7, "1101" },
+                { 8, "1110" },
+                { 9, "1111" }
+            };
+
+            for (int i = 0; i < 10; i++)
+            {
+                for(int j = 0; j < 10; j++)
+                {
+                    bool overflow = (i + j > 9);
+                    string expectedOutput = overflow ? "00001" : $"{numbers[i + j]}0";
+                    string output = Adder(numbers[i], numbers[j]);
+                    if(overflow)
+                    {
+                        if(output[4] != '1')
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($" Failed {i}+{j} Output: {output} exOut: {expectedOutput} ");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if(output != expectedOutput)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"Failed {i}+{j} Output: {output} exOut: {expectedOutput} ");
+                            continue;
+                        }
+                    }
+                    Console.Write(".");
+                }
+            }
         }
 
         public static string Adder(string numA, string numB)
@@ -54,7 +99,7 @@ namespace LogicGate
             bool o4 = xor7;
             bool co = or3;
 
-            return $"{o4}{o3}{o2}{o1}{co}";
+            return $"{Convert.ToInt32(o4)}{Convert.ToInt32(o3)}{Convert.ToInt32(o2)}{Convert.ToInt32(o1)}{Convert.ToInt32(co)}";
         }
 
 
