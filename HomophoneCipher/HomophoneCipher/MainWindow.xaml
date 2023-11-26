@@ -1,0 +1,197 @@
+﻿<Window x:Class="HomophoneCipher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HomophoneCipher"
+        mc:Ignorable="d"
+        
+        FontSize="20"
+        FontFamily="Consolas"
+        Foreground="#eeeeee"
+        
+        Title="HomophoneCipher - Bartłomiej Fryczek" Height="576" Width="1024">
+
+
+    <Window.Resources>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="#eeeeee"/>
+            <Setter Property="Background" Value="#222024"/>
+            <Setter Property="BorderBrush" Value="#bbbbbb"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="#eeeeee"/>
+            <Setter Property="Background" Value="#222024"/>
+            <Setter Property="BorderBrush" Value="#bbbbbb"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#eeeeee"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+
+
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#222024"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#6782b8"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Foreground" Color="#6490e8"/>
+
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#1f1e21"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#6490e8"/>
+        <SolidColorBrush x:Key="Button.Pressed.Foreground" Color="#6490e8"/>
+
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+
+        <ControlTemplate x:Key="ButtonTemplate1" TargetType="{x:Type ButtonBase}">
+            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Button.IsDefaulted" Value="true">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.MouseOver.Foreground}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Pressed.Foreground}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+    </Window.Resources>
+
+
+    <Grid Background="#222024">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="30"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+
+            <RowDefinition Height="auto"></RowDefinition>
+
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+
+
+
+        <TextBox
+            Grid.Row="1" Grid.Column="1" Margin="16" Padding="12" Grid.RowSpan="4"
+            TextWrapping="Wrap"
+            Text="Text to cipher"
+            Name="TextToCipher">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="15"></Setter>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <Button Template="{DynamicResource ButtonTemplate1}"
+            Grid.Row="2" Grid.Column="2" Margin="16 10"
+            Content="Cipher Text"
+            Click="CipherButton_Click"
+            Name="CipherButton">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="20"></Setter>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <TextBox
+            Grid.Row="1" Grid.Column="3" Margin="16" Padding="12" Grid.RowSpan="4"
+            TextWrapping="Wrap"
+            Text="Ciphered text"
+            Name="CipheredText">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="15"></Setter>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+
+
+
+
+        <Rectangle
+            Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" Margin="20px" Height="4px"
+            Fill="#eeeeee"/>
+
+
+
+
+
+        <TextBox
+            Grid.Row="6" Grid.Column="1" Margin="16" Padding="12" Grid.RowSpan="4"
+            TextWrapping="Wrap"
+            Text="Text to decipher"
+            Name="TextToDecipher">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="15"></Setter>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <Button Template="{DynamicResource ButtonTemplate1}"
+            Grid.Row="7" Grid.Column="2" Margin="16 10"
+            Content="Decipher Text"
+            Click="DecipherButton_Click"
+            Name="DecipherButton">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="20"></Setter>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <TextBox
+            Grid.Row="6" Grid.Column="3" Margin="16" Padding="12" Grid.RowSpan="4"
+            TextWrapping="Wrap"
+            Text="Deciphered text"
+            Name="DecipheredText">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="15"></Setter>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+    </Grid>
+
+</Window>
