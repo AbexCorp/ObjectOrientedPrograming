@@ -90,12 +90,26 @@ namespace HomophoneCipher
 
         private void CipherButton_Click(object sender, RoutedEventArgs e)
         {
-            CipheredText.Text = Cipher(TextToCipher.Text);
+            try
+            {
+                CipheredText.Text = Cipher(TextToCipher.Text);
+            }
+            catch(KeyNotFoundException)
+            {
+                MessageBox.Show("Invalid characters");
+            }
         }
 
         private void DecipherButton_Click(object sender, RoutedEventArgs e)
         {
-            DecipheredText.Text = Decipher(TextToDecipher.Text);
+            try
+            {
+                DecipheredText.Text = Decipher(TextToDecipher.Text);
+            }
+            catch(KeyNotFoundException)
+            {
+                MessageBox.Show("Invalid characters");
+            }
         }
 
 
