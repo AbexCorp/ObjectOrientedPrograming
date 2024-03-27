@@ -9,12 +9,6 @@ namespace SortingTest
     {
         static void Main()
         {
-            //random
-            //sorted
-            //reversed
-            //almostsorted
-            //fewunique
-
             BenchmarkRunner.Run<InsertionVsMergeVsQuickClassicVsQuick>();
         }
     }
@@ -322,24 +316,3 @@ namespace Generators
         }
     }
 }
-
-
-//public static void SmallArray()
-//        {
-//            size = 20;
-//            min = 0;
-//            max = 40;
-//        }
-//        public static void MediumArray()
-//        {
-//            size = 1000;
-//            min = 0;
-//            max = 2000;
-//        }
-//        public static void BigArray()
-//        {
-//            size = 100000;
-                   //10000
-//            min = 0;
-//            max = 200000;
-//        }
